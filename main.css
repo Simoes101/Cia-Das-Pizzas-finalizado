@@ -1,0 +1,767 @@
+:root {
+    --bg: #0f1416; /* deep charcoal, not pure black */
+    --surface: #131516;
+    --surface-soft: #171819;
+    --text: #f3efe9;
+    --muted: #bcb6b0;
+    --accent: #c47e3a; /* warm gold/copper for sofisticação */
+    --accent-soft: rgba(196,126,58,0.06);
+    --accent-strong: #d87b2f;
+    --border: rgba(255,255,255,0.04);
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(180deg, #0f1416 0%, #161718 100%);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.container {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.site-header {
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.6)), url('pizza-imagem_jpg.webp');
+    background-size: cover;
+    background-position: center;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background-blend-mode: multiply;
+}
+
+.header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.brand-name {
+    display: inline-block;
+    font-size: 1.1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.brand-copy {
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 38rem;
+    font-size: 1.05rem;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.site-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    padding: 0.8rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.site-nav a:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: translateY(-1px);
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 1rem 1.5rem;
+    border: 1px solid transparent;
+    font-weight: 700;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+}
+
+.button-outline {
+    background-color: transparent;
+    color: var(--accent);
+    border-color: rgba(185, 28, 28, 0.18);
+}
+
+.button-secondary {
+    background-color: #ffffff;
+    color: var(--accent);
+}
+
+.hero {
+    padding: 4rem 0;
+}
+
+.hero-copy {
+    max-width: 42rem;
+}
+
+.eyebrow {
+    display: inline-flex;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.hero h1 {
+    font-size: clamp(2.5rem, 4vw, 3.6rem);
+    max-width: 12ch;
+    margin-bottom: 1.2rem;
+    line-height: 1.05;
+}
+
+.hero p {
+    color: var(--muted);
+    max-width: 45rem;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section {
+    padding: 2.5rem 0;
+}
+
+.section-header {
+    max-width: 44rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    margin: 0.5rem 0 0.8rem;
+    color: var(--text);
+}
+
+.section-header p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.cardapio {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+}
+
+.card {
+    background-color: var(--surface);
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: grid;
+    gap: 1rem;
+}
+
+.card-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.card h3 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: var(--text);
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-strong);
+}
+
+.promo-section {
+    background-color: var(--surface-soft);
+    border-top: 1px solid rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.promo-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--surface);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.promo-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.promo-card h3 {
+    font-size: 1.85rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.promo-action {
+    display: grid;
+    gap: 1rem;
+    justify-items: end;
+}
+
+.site-footer {
+    background-color: #1a1a1a;
+    color: #f7f3ee;
+    padding: 2.5rem 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    align-items: start;
+}
+
+.site-footer h4 {
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+}
+
+.site-footer a {
+    color: #f7f3ee;
+}
+
+.footer-note {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: rgba(247, 243, 238, 0.72);
+}
+
+.form-section,
+.status-section {
+    padding: 3rem 0;
+}
+
+.form-card,
+.status-card {
+    background-color: var(--surface);
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.form-card h2,
+.status-card h2 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.form-card .section-copy,
+.status-card p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.campo-texto {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    background-color: var(--surface-soft);
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    border: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.form-group legend {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.dica-sabores {
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+.opcoes-selecao {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.opcoes-selecao label {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 1rem;
+    align-items: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    position: relative;
+}
+
+.opcoes-selecao label:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    border-color: rgba(255,255,255,0.06);
+}
+
+.opcoes-selecao label div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+/* Price pill */
+.opcoes-selecao label .price {
+    background: rgba(255,255,255,0.03);
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    color: var(--accent-strong);
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* checked state: modern browsers support :has, but also provide fallback using sibling selector */
+label:has(input:checked) {
+    border-color: var(--accent-strong);
+}
+
+.opcoes-selecao label input:checked + div {
+    box-shadow: inset 0 0 0 1px rgba(216,123,47,0.08);
+}
+
+/* make input align neatly */
+.opcoes-selecao label input[type="checkbox"],
+.opcoes-selecao label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-strong);
+}
+
+/* card hover for general cards */
+.card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+
+.opcoes-selecao input[type="radio"],
+.opcoes-selecao input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+}
+
+.button-full {
+    width: 100%;
+}
+
+.link-secondary {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.link-secondary:hover {
+    text-decoration: underline;
+}
+
+.status-steps {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.status-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background-color: var(--surface-soft);
+}
+
+.status-step.active {
+    border-color: var(--accent);
+    background-color: rgba(200,160,120,0.06);
+}
+
+.status-step .icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background-color: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.status-step strong {
+    display: block;
+    color: var(--text);
+}
+
+.status-step p {
+    color: var(--muted);
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .header-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .site-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.5rem;
+        padding-bottom: 0.25rem;
+    }
+
+    .site-nav a {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+
+    .promo-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .container {
+        width: calc(100% - 1.5rem);
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .cardapio,
+    .opcoes-selecao,
+    .status-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .site-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.4rem;
+    }
+
+    .site-nav a {
+        min-width: auto;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}
+
+/* Canvas de background criado por JS */
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* atrás do conteúdo, à frente do background */
+    pointer-events: none;
+    opacity: 0.95;
+    mix-blend-mode: overlay;
+}
+
+/* Cart panel styles */
+#cart-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    font-family: inherit;
+}
+#cart-toggle {
+    background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    cursor: pointer;
+    font-weight: 700;
+}
+#cart-badge {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 0.12rem 0.5rem;
+    border-radius: 999px;
+    margin-right: 0.5rem;
+}
+#cart-drawer {
+    position: absolute;
+    right: 0;
+    bottom: 56px;
+    width: 320px;
+    max-height: 70vh;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 12px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+#cart-drawer.hidden { display:none; }
+#cart-drawer header { display:flex; justify-content:space-between; align-items:center; padding:0.8rem 1rem; border-bottom:1px solid rgba(255,255,255,0.02); }
+#cart-items { padding:0.6rem 0.8rem; overflow:auto; flex:1; }
+.cart-row { display:flex; justify-content:space-between; align-items:center; gap:0.5rem; padding:0.5rem 0; border-bottom:1px dashed rgba(255,255,255,0.02); }
+.cart-row .cart-name { flex:1; font-size:0.95rem; color:var(--text); }
+.cart-controls { display:flex; align-items:center; gap:0.4rem; }
+.cart-controls button { background:transparent; border:none; color:var(--muted); font-size:1rem; cursor:pointer; }
+.cart-price { font-weight:700; color:var(--accent-strong); min-width:72px; text-align:right; }
+#cart-drawer footer { padding:0.8rem; border-top:1px solid rgba(255,255,255,0.02); }
+.cart-total { font-weight:700; margin-bottom:0.6rem; }
+.cart-actions { display:flex; gap:0.5rem; }
+.cart-actions .button { flex:1; }
+
+/* Estilização Profissional dos Cards de Pastel */
+.pastel-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1.5rem !important;
+}
+
+.xis-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1.5rem !important;
+}
+
+.porcao-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 1.2rem !important;
+    min-height: auto;
+}
+
+.porcao-card h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.porcao-card .price {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.porcao-card .add-btn {
+    margin-top: auto;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.price-badge {
+    background-color: rgba(229, 57, 53, 0.1);
+    color: #e53935;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.card-desc {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+    flex-grow: 1;
+    line-height: 1.4;
+}
+
+/* Seletor de Tamanhos (Pills) */
+.size-selector {
+    display: flex;
+    gap: 6px;
+    background: #f1f3f5;
+    padding: 3px;
+    border-radius: 8px;
+}
+
+.size-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #495057;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.size-btn.active {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-btn {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.extra-card {
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+.extra-info {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 6px;
+}
+
+/* Grid compacto para adicionais */
+.cardapio-extras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.extra-card {
+    padding: 1.2rem !important;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.8rem;
+}
+
+.extra-card h3 {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--text);
+}
+
+.extra-card .price {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.extra-card .button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+

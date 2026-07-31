@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bebidas - Cia das Pizzas</title>
+    <meta name="description" content="Bebidas geladas e refrescantes para acompanhar seu pedido.">
+    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Ajustes visuais para seleção nos cards do cardápio */
+        .bebida-card {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .bebida-card:hover {
+            border-color: rgba(196, 126, 58, 0.6);
+        }
+        .bebida-card.selected {
+            border-color: #c47e3a !important;
+            background: rgba(196, 126, 58, 0.15) !important;
+        }
+        .bebida-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 18px;
+            height: 18px;
+            accent-color: #c47e3a;
+        }
+        .categoria-titulo {
+            margin: 2.5rem 0 1rem 0;
+            color: #c47e3a;
+            font-size: 1.15rem;
+            border-bottom: 1px solid rgba(196, 126, 58, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        .categoria-titulo:first-of-type {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Bebidas geladas para acompanhar sua refeição.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">← Voltar ao Início</a>
+                <a href="pizza.html">Pizza</a>
+                <a href="xis.html">Xis</a>
+                <a href="porcoes.html">Porções & Hot Dogs</a>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer" class="button button-secondary">WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Bebidas</p>
+                <h2>Refresque-se</h2>
+                <p>Selecione as bebidas desejadas para acompanhar seu pedido.</p>
+            </div>
+
+            <h3 class="categoria-titulo">Latas (350ml)</h3>
+            <div class="cardapio">
+                <article class="card bebida-card" data-name="Coca-Cola Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Coca-Cola</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Coca-Cola Zero Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Coca-Cola Zero</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Fanta Laranja Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Fanta Laranja</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Fanta Uva Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Fanta Uva</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Guaraná Normal Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Guaraná Normal</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Guaraná Zero Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Guaraná Zero</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Água Tônica Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Água Tônica</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Suco Del Valle Uva Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Suco Del Valle Uva</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Suco Del Valle Pêssego Lata" data-price="9.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Suco Del Valle Pêssego</h3>
+                    <p>Lata 350ml trincando de gelada.</p>
+                    <p class="price">R$ 9,90</p>
+                </article>
+            </div>
+
+            <h3 class="categoria-titulo">600ml</h3>
+            <div class="cardapio">
+                <article class="card bebida-card" data-name="Coca-Cola 600ml" data-price="12.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Coca-Cola 600ml</h3>
+                    <p>Garrafa 600ml trincando de gelada.</p>
+                    <p class="price">R$ 12,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Coca-Cola Zero 600ml" data-price="12.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Coca-Cola Zero 600ml</h3>
+                    <p>Garrafa 600ml trincando de gelada.</p>
+                    <p class="price">R$ 12,90</p>
+                </article>
+            </div>
+
+            <h3 class="categoria-titulo">Cervejas Long Neck</h3>
+            <div class="cardapio">
+                <article class="card bebida-card" data-name="Heineken Long Neck" data-price="15.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Heineken</h3>
+                    <p>Long neck 330ml gelada.</p>
+                    <p class="price">R$ 15,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Budweiser Long Neck" data-price="15.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Budweiser</h3>
+                    <p>Long neck 330ml gelada.</p>
+                    <p class="price">R$ 15,90</p>
+                </article>
+
+                <article class="card bebida-card" data-name="Bohemia Long Neck" data-price="15.90">
+                    <input type="checkbox" class="bebida-checkbox">
+                    <h3>Bohemia</h3>
+                    <p>Long neck 330ml gelada.</p>
+                    <p class="price">R$ 15,90</p>
+                </article>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <button type="button" class="button button-primary" id="add-bebidas-btn" style="width: 100%; max-width: 400px; padding: 1rem; font-size: 1.1rem;">
+                    Adicionar Bebidas ao Carrinho
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h4>Cia das Pizzas</h4>
+                <p>Balneário Camboriú / SC</p>
+            </div>
+            <div>
+                <p>WhatsApp</p>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer">+55 47 99990-6218</a>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Cia das Pizzas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="bg-animation.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bebidaCards = document.querySelectorAll('.bebida-card');
+            const addBtn = document.getElementById('add-bebidas-btn');
+
+            // Alterna seleção ao clicar no card
+            bebidaCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const checkbox = card.querySelector('.bebida-checkbox');
+                    if (e.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+
+                    if (checkbox.checked) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+            });
+
+            // Envia os itens selecionados para o carrinho
+            if (addBtn) {
+                addBtn.addEventListener('click', () => {
+                    const selectedCards = document.querySelectorAll('.bebida-card.selected');
+
+                    if (selectedCards.length === 0) {
+                        alert('Selecione pelo menos uma bebida para adicionar!');
+                        return;
+                    }
+
+                    selectedCards.forEach(card => {
+                        const name = card.dataset.name;
+                        const price = parseFloat(card.dataset.price);
+                        const sku = `bebida-${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+
+                        if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                            window.PizzariaCart.addItem({
+                                sku: sku,
+                                name: name,
+                                price: price,
+                                qty: 1
+                            });
+                        }
+                    });
+
+                    // Feedback visual
+                    const originalText = addBtn.textContent;
+                    addBtn.textContent = '✓ Adicionado ao Carrinho!';
+                    addBtn.style.backgroundColor = '#2e7d32';
+
+                    // Reseta seleção
+                    bebidaCards.forEach(card => {
+                        card.classList.remove('selected');
+                        card.querySelector('.bebida-checkbox').checked = false;
+                    });
+
+                    setTimeout(() => {
+                        addBtn.textContent = originalText;
+                        addBtn.style.backgroundColor = '';
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

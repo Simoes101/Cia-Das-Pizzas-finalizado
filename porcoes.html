@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Porções & Hot Dogs | Cia das Pizzas</title>
+    <meta name="description" content="Porções de batata, camarão, frango e deliciosos hot dogs de 16cm.">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Pizza artesanal, crocância na medida e atendimento premium.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">← Voltar ao Início</a>
+                <a href="pizza.html">Pizza</a>
+                <a href="xis.html">Xis</a>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer" class="button button-secondary">WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Para Compartilhar</p>
+                <h2>Porções</h2>
+                <p>Porções quentinhas e saborosas para acompanhar sua refeição.</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; background: rgba(196, 126, 58, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(196, 126, 58, 0.3);">
+                <label style="display: block; color: #c47e3a; font-weight: 500; margin-bottom: 0.5rem;">Observações para Porções</label>
+                <textarea id="obs-porcoes" placeholder="Ex: Mais crocante, sem sal, bem quente, etc." style="width: 100%; padding: 0.75rem; border: 1px solid rgba(196, 126, 58, 0.5); border-radius: 4px; background: rgba(15, 20, 22, 0.5); color: #e0ddd8; font-family: inherit; resize: vertical; min-height: 80px;"></textarea>
+                <button class="button button-secondary" style="margin-top: 0.5rem; padding: 0.6rem 1rem; font-size: 0.85rem;" id="add-obs-porcoes">Adicionar Observação</button>
+            </div>
+
+            <div class="cardapio">
+                <article class="card porcao-card" data-name="Batata Frita (500g)" data-price="29.90">
+                    <h3>Batata Frita (500g)</h3>
+                    <p class="price">R$ 29,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Batata Frita (1/2 Porção)" data-price="24.90">
+                    <h3>Batata Frita (1/2 Porção)</h3>
+                    <p class="price">R$ 24,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Batata Frita c/ Queijo e Bacon" data-price="45.90">
+                    <h3>Batata Frita c/ Queijo e Bacon</h3>
+                    <p class="price">R$ 45,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Camarão à Milanesa (500g)" data-price="114.90">
+                    <h3>Camarão à Milanesa (500g)</h3>
+                    <p class="price">R$ 114,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Camarão à Milanesa (1/2 Porção)" data-price="89.90">
+                    <h3>Camarão à Milanesa (1/2 Porção)</h3>
+                    <p class="price">R$ 89,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Frango a Passarinho (500g)" data-price="45.90">
+                    <h3>Frango a Passarinho (500g)</h3>
+                    <p class="price">R$ 45,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Frango a Passarinho (1/2 Porção)" data-price="34.90">
+                    <h3>Frango a Passarinho (1/2 Porção)</h3>
+                    <p class="price">R$ 34,90</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">16cm de Sabor</p>
+                <h2>Hot Dogs</h2>
+                <p>Opções salgadas e doces preparadas na hora.</p>
+            </div>
+
+            <div class="cardapio">
+                <article class="card porcao-card" data-name="Hot Tradicional" data-price="17.00">
+                    <h3>Hot Tradicional</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Bacon" data-price="18.00">
+                    <h3>Hot Bacon</h3>
+                    <p class="price">R$ 18,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Frango" data-price="17.00">
+                    <h3>Hot Frango</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Costela" data-price="22.00">
+                    <h3>Hot Costela</h3>
+                    <p class="price">R$ 22,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Calabresa" data-price="17.00">
+                    <h3>Hot Calabresa</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Linguiça" data-price="17.00">
+                    <h3>Hot Linguiça</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Prestígio" data-price="17.00">
+                    <h3>Hot Prestígio</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+
+                <article class="card porcao-card" data-name="Hot Sensação" data-price="17.00">
+                    <h3>Hot Sensação</h3>
+                    <p class="price">R$ 17,00</p>
+                    <button class="button button-primary add-btn">Adicionar</button>
+                </article>
+            </div>
+
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Turbine seu Hot Dog</p>
+                <h2>Adicionais</h2>
+            </div>
+            <div class="cardapio-extras">
+                <article class="card extra-card" data-name="Salsicha" data-price="3.00">
+                    <h3>Salsicha</h3>
+                    <p class="price">R$ 3,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Bacon" data-price="5.00">
+                    <h3>Bacon</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Frango" data-price="4.00">
+                    <h3>Frango</h3>
+                    <p class="price">R$ 4,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Calabresa" data-price="4.00">
+                    <h3>Calabresa</h3>
+                    <p class="price">R$ 4,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Catupiry" data-price="3.00">
+                    <h3>Catupiry</h3>
+                    <p class="price">R$ 3,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Cheddar" data-price="3.00">
+                    <h3>Cheddar</h3>
+                    <p class="price">R$ 3,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h4>Cia das Pizzas</h4>
+                <p>Balneário Camboriú / SC</p>
+            </div>
+            <div>
+                <p>WhatsApp</p>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer">+55 47 99990-6218</a>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Cia das Pizzas. Todos os direitos reservados.</p>
+    </footer>
+    <script src="bg-animation.js"></script>
+    <script src="cart.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.porcao-card .add-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.porcao-card');
+                const name = card.dataset.name;
+                const price = parseFloat(card.dataset.price);
+                const sku = `porcao-${name.toLowerCase().replace(/\s+/g, '-')}`;
+
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: name,
+                        price: price,
+                        qty: 1
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.add-extra-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.extra-card');
+                const name = card.dataset.name;
+                const price = parseFloat(card.dataset.price);
+                const sku = `extra-${name.toLowerCase().replace(/\s+/g, '-')}`;
+
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: `Adicional: ${name}`,
+                        price: price,
+                        qty: 1
+                    });
+                }
+            });
+        });
+
+        // Botão de observações
+        document.getElementById('add-obs-porcoes').addEventListener('click', () => {
+            const textarea = document.getElementById('obs-porcoes');
+            const obs = textarea.value.trim();
+
+            if (obs) {
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: `obs-porcoes-${Date.now()}`,
+                        name: `📝 Observação: ${obs}`,
+                        price: 0,
+                        qty: 1
+                    });
+                    textarea.value = '';
+                    alert('Observação adicionada ao carrinho!');
+                }
+            } else {
+                alert('Escreva uma observação!');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

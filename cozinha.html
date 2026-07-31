@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozinha - Cia das Pizzas</title>
+    <link rel="stylesheet" href="main.css">
+    <style>
+        body { background: #0f1416; }
+        .cozinha-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 1.5rem; border-bottom: 1px solid rgba(196,126,58,0.3);
+        }
+        .cozinha-header h1 { margin: 0; font-size: 1.3rem; color: #e0ddd8; }
+        .status-conexao { font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 20px; }
+        .status-conexao.online { background: rgba(46,125,50,0.2); color: #6fcf73; border: 1px solid #2e7d32; }
+        .status-conexao.offline { background: rgba(198,40,40,0.2); color: #ef5350; border: 1px solid #c62828; }
+        .cozinha-toolbar { display:flex; gap:0.75rem; padding: 0.75rem 1.5rem; }
+        .cozinha-toolbar button { cursor:pointer; }
+        #lista-pedidos {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem; padding: 1.5rem;
+        }
+        .pedido-card {
+            background: rgba(15,20,22,0.7); border: 1px solid rgba(196,126,58,0.4);
+            border-radius: 12px; padding: 1rem; color: #e0ddd8;
+        }
+        .pedido-card.novo { border-color: #c47e3a; box-shadow: 0 0 0 2px rgba(196,126,58,0.4); }
+        .pedido-card h3 { margin: 0 0 0.5rem 0; color: #c47e3a; }
+        .pedido-card .hora { font-size: 0.75rem; color: #999; float: right; }
+        .pedido-card .itens { margin: 0.5rem 0; padding-left: 1rem; }
+        .pedido-card .total { font-weight: 600; margin-top: 0.5rem; }
+        .pedido-card .acoes { margin-top: 0.75rem; display: flex; gap: 0.5rem; }
+        .pedido-card .acoes button { flex: 1; padding: 0.4rem; font-size: 0.85rem; cursor: pointer; }
+        .vazio { padding: 3rem; text-align: center; color: #888; }
+
+        /* Área usada apenas para impressão da comanda (fica invisível na tela) */
+        #area-impressao { display: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #area-impressao, #area-impressao * { visibility: visible; }
+            #area-impressao {
+                display: block;
+                position: absolute; top: 0; left: 0;
+                width: 72mm;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                color: #000;
+            }
+            @page { size: 80mm auto; margin: 2mm; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cozinha-header">
+        <h1>🍕 Painel da Cozinha</h1>
+        <span id="status-conexao" class="status-conexao offline">Conectando...</span>
+    </div>
+
+    <div class="cozinha-toolbar">
+        <button type="button" class="button button-secondary" id="btn-testar">Testar impressão</button>
+        <button type="button" class="button button-secondary" id="btn-som">🔊 Som: Ligado</button>
+    </div>
+
+    <div id="lista-pedidos">
+        <p class="vazio">Aguardando pedidos...</p>
+    </div>
+
+    <div id="area-impressao"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const statusEl = document.getElementById('status-conexao');
+        const listaEl = document.getElementById('lista-pedidos');
+        const areaImpressao = document.getElementById('area-impressao');
+        const btnSom = document.getElementById('btn-som');
+
+        let somLigado = true;
+        let pedidosRenderizados = new Map();
+        let filaImpressao = [];
+        let imprimindo = false;
+
+        socket.on('connect', () => {
+            statusEl.textContent = 'Online';
+            statusEl.className = 'status-conexao online';
+        });
+        socket.on('disconnect', () => {
+            statusEl.textContent = 'Offline - verifique a internet';
+            statusEl.className = 'status-conexao offline';
+        });
+
+        socket.on('historico_pedidos', (pedidos) => {
+            pedidos.forEach(p => renderizarPedido(p, false));
+        });
+
+        socket.on('novo_pedido', (pedido) => {
+            renderizarPedido(pedido, true);
+            tocarBeep();
+            enfileirarImpressao(pedido);
+        });
+
+        function formatPrice(v) {
+            return 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
+        }
+
+        function renderizarPedido(pedido, destacarComoNovo) {
+            if (pedidosRenderizados.has(pedido.id)) return;
+            pedidosRenderizados.set(pedido.id, pedido);
+
+            if (listaEl.querySelector('.vazio')) listaEl.innerHTML = '';
+
+            const card = document.createElement('article');
+            card.className = 'pedido-card' + (destacarComoNovo ? ' novo' : '');
+            card.id = 'pedido-' + pedido.id;
+
+            const hora = new Date(pedido.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const itensHtml = pedido.itens.map(it =>
+                `<li>${it.qty}x ${escapeHtml(it.nome)} — ${formatPrice(it.price * it.qty)}</li>`
+            ).join('');
+
+            card.innerHTML = `
+                <span class="hora">${hora}</span>
+                <h3>Pedido #${pedido.id}</h3>
+                <p><strong>${escapeHtml(pedido.cliente.nome)}</strong> · ${escapeHtml(pedido.cliente.telefone)}</p>
+                <p>${escapeHtml(pedido.cliente.endereco)}, ${escapeHtml(pedido.cliente.bairro)}</p>
+                ${pedido.cliente.referencia ? `<p>Ref: ${escapeHtml(pedido.cliente.referencia)}</p>` : ''}
+                <ul class="itens">${itensHtml}</ul>
+                <p class="total">Total: ${formatPrice(pedido.total)} · Pagamento: ${escapeHtml(pedido.pagamento)}</p>
+                <div class="acoes">
+                    <button type="button" class="button button-secondary btn-reimprimir">Reimprimir</button>
+                </div>
+            `;
+
+            card.querySelector('.btn-reimprimir').addEventListener('click', () => enfileirarImpressao(pedido));
+
+            listaEl.prepend(card);
+
+            setTimeout(() => card.classList.remove('novo'), 8000);
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function montarComanda(pedido) {
+            const hora = new Date(pedido.criadoEm).toLocaleString('pt-BR');
+            const itensTexto = pedido.itens.map(it =>
+                `${it.qty}x ${escapeHtml(it.nome)}\n    ${formatPrice(it.price * it.qty)}`
+            ).join('\n');
+
+            return `
+                <div style="text-align:center; font-weight:bold; font-size:14px;">CIA DAS PIZZAS</div>
+                <div style="text-align:center;">Pedido #${pedido.id}</div>
+                <div style="text-align:center;">${hora}</div>
+                <div>--------------------------------</div>
+                <div><strong>Cliente:</strong> ${escapeHtml(pedido.cliente.nome)}</div>
+                <div><strong>Fone:</strong> ${escapeHtml(pedido.cliente.telefone)}</div>
+                <div><strong>Endereço:</strong> ${escapeHtml(pedido.cliente.endereco)}, ${escapeHtml(pedido.cliente.bairro)}</div>
+                ${pedido.cliente.referencia ? `<div><strong>Ref:</strong> ${escapeHtml(pedido.cliente.referencia)}</div>` : ''}
+                <div>--------------------------------</div>
+                <pre style="white-space:pre-wrap; font-family:inherit; margin:0;">${itensTexto}</pre>
+                <div>--------------------------------</div>
+                <div><strong>Total: ${formatPrice(pedido.total)}</strong></div>
+                <div><strong>Pagamento:</strong> ${escapeHtml(pedido.pagamento)}</div>
+                ${pedido.obsGeral ? `<div>--------------------------------</div><div>Obs: ${escapeHtml(pedido.obsGeral)}</div>` : ''}
+                <div>--------------------------------</div>
+                <div style="text-align:center;">Obrigado pela preferência!</div>
+            `;
+        }
+
+        function enfileirarImpressao(pedido) {
+            filaImpressao.push(pedido);
+            processarFila();
+        }
+
+        function processarFila() {
+            if (imprimindo || filaImpressao.length === 0) return;
+            imprimindo = true;
+
+            const pedido = filaImpressao.shift();
+            areaImpressao.innerHTML = montarComanda(pedido);
+
+            // Pequeno atraso pra garantir que o HTML da comanda renderizou
+            // antes de chamar a impressão.
+            setTimeout(() => {
+                window.print();
+                socket.emit('pedido_impresso', pedido.id);
+                imprimindo = false;
+                setTimeout(processarFila, 400);
+            }, 150);
+        }
+
+        document.getElementById('btn-testar').addEventListener('click', () => {
+            enfileirarImpressao({
+                id: 'TESTE',
+                criadoEm: new Date().toISOString(),
+                cliente: { nome: 'Cliente Teste', telefone: '(47) 90000-0000', endereco: 'Rua Exemplo, 123', bairro: 'Centro', referencia: '' },
+                itens: [{ nome: 'Pizza 1/2 Metro (Calabresa / Mussarela)', qty: 1, price: 110.9 }],
+                total: 110.9,
+                pagamento: 'pix'
+            });
+        });
+
+        btnSom.addEventListener('click', () => {
+            somLigado = !somLigado;
+            btnSom.textContent = somLigado ? '🔊 Som: Ligado' : '🔇 Som: Desligado';
+        });
+
+        function tocarBeep() {
+            if (!somLigado) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 880;
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.35);
+            } catch (e) { /* ignora se o navegador bloquear áudio */ }
+        }
+    </script>
+</body>
+</html>

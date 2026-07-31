@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Xis Gaúcho | Cia das Pizzas</title>
+    <meta name="description" content="Autêntico Xis Gaúcho prensado em dois tamanhos (14cm e 18cm).">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Pizza artesanal, crocância na medida e atendimento premium.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">← Voltar ao Início</a>
+                <a href="pizza.html">Pizza</a>
+                <a href="porcoes.html">Porções & Hot Dogs</a>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer" class="button button-secondary">WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Prensado Tradicional</p>
+                <h2>Xis Gaúcho</h2>
+                <p>Disponível nos tamanhos 14cm e 18cm com recheios muito generosos.</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; background: rgba(196, 126, 58, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(196, 126, 58, 0.3);">
+                <label style="display: block; color: #c47e3a; font-weight: 500; margin-bottom: 0.5rem;">Observações para Xis</label>
+                <textarea id="obs-xis" placeholder="Ex: Xis bem quente, pouco molho, sem alface, etc." style="width: 100%; padding: 0.75rem; border: 1px solid rgba(196, 126, 58, 0.5); border-radius: 4px; background: rgba(15, 20, 22, 0.5); color: #e0ddd8; font-family: inherit; resize: vertical; min-height: 80px;"></textarea>
+                <button class="button button-secondary" style="margin-top: 0.5rem; padding: 0.6rem 1rem; font-size: 0.85rem;" id="add-obs-xis">Adicionar Observação</button>
+            </div>
+
+            <div class="cardapio">
+                <article class="card xis-card" data-name="Picanha" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>Picanha</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, picanha grelhada, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Português" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Português</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, cebola, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Strogonoff" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Strogonoff</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, strogonoff (carne/frango), queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Super" data-price-p="32.00" data-price-g="37.00">
+                    <div class="card-header">
+                        <h3>Super</h3>
+                        <span class="price-badge">R$ 32,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, calabresa, galinha, bacon, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="32.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="37.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Tropical" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Tropical</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, galinha desfiada, presunto, figo, abacaxi, pêssego e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Vegetariano" data-price-p="29.00" data-price-g="33.00">
+                    <div class="card-header">
+                        <h3>Vegetariano</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, queijo e 2 ovos.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="29.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="33.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="5 Estrelas" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>5 Estrelas</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, bacon, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Simples" data-price-p="28.00" data-price-g="32.00">
+                    <div class="card-header">
+                        <h3>Simples</h3>
+                        <span class="price-badge">R$ 28,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, bife, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="28.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="32.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Simples Bacon" data-price-p="30.00" data-price-g="35.00">
+                    <div class="card-header">
+                        <h3>Simples Bacon</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, bife, bacon, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="30.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="35.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Simples Calabresa" data-price-p="29.00" data-price-g="33.00">
+                    <div class="card-header">
+                        <h3>Simples Calabresa</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, calabresa, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="29.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="33.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Simples Galinha" data-price-p="29.00" data-price-g="33.00">
+                    <div class="card-header">
+                        <h3>Simples Galinha</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, galinha, calabresa, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="29.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="33.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Atum" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Atum</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, atum, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Bacon" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Bacon</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, bacon, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Bagunça" data-price-p="32.00" data-price-g="37.00">
+                    <div class="card-header">
+                        <h3>Bagunça</h3>
+                        <span class="price-badge">R$ 32,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, presunto, galinha, bacon, coração, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="32.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="37.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Califórnia" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Califórnia</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, bife, presunto, figo, abacaxi, pêssego, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Carne" data-price-p="29.00" data-price-g="33.00">
+                    <div class="card-header">
+                        <h3>Carne</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="29.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="33.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Calabresa" data-price-p="30.00" data-price-g="34.00">
+                    <div class="card-header">
+                        <h3>Calabresa</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, calabresa, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="30.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="34.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Chocolate" data-price-p="30.00" data-price-g="34.00">
+                    <div class="card-header">
+                        <h3>Chocolate</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Leite condensado, chocolate, coco ralado e queijo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="30.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="34.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Coração" data-price-p="32.00" data-price-g="37.00">
+                    <div class="card-header">
+                        <h3>Coração</h3>
+                        <span class="price-badge">R$ 32,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, coração, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="32.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="37.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Especial" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Especial</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, frango, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Filé" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>Filé</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, filé, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Frangão" data-price-p="31.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Frangão</h3>
+                        <span class="price-badge">R$ 31,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, filé de frango grelhado, cebola, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="31.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Galinha" data-price-p="30.00" data-price-g="34.00">
+                    <div class="card-header">
+                        <h3>Galinha</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, galinha desfiada, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="30.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="34.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Galinhão" data-price-p="32.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Galinhão</h3>
+                        <span class="price-badge">R$ 32,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, peito de frango desfiado ao molho, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="32.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Palmito" data-price-p="30.00" data-price-g="36.00">
+                    <div class="card-header">
+                        <h3>Palmito</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, bife, palmito, presunto, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="30.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="36.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Costela" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>Costela</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, costela, purê, queijo e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Linguiça Blumenau" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>Linguiça Blumenau</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, Linguiça Blumenau, purê, queijo, cheddar e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card xis-card" data-name="Carne Seca" data-price-p="40.00" data-price-g="45.00">
+                    <div class="card-header">
+                        <h3>Carne Seca</h3>
+                        <span class="price-badge">R$ 40,00</span>
+                    </div>
+                    <p class="card-desc">Maionese, ketchup, mostarda, milho, ervilha, tomate, alface, carne seca, purê, queijo, cream cheese e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="P" data-price="40.00">14cm (P)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="45.00">18cm (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Turbine seu Xis</p>
+                <h2>Adicionais (+ R$ 5,00 cada)</h2>
+            </div>
+            <div class="cardapio-extras">
+                <article class="card extra-card" data-name="Bacon" data-price="5.00">
+                    <h3>Bacon</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Queijo Extra" data-price="5.00">
+                    <h3>Queijo Extra</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Ovo Extra" data-price="5.00">
+                    <h3>Ovo Extra</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Palmito" data-price="5.00">
+                    <h3>Palmito</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Cheddar" data-price="5.00">
+                    <h3>Cheddar</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Catupiry" data-price="5.00">
+                    <h3>Catupiry</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+            </div>
+        </section>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h4>Cia das Pizzas</h4>
+                <p>Balneário Camboriú / SC</p>
+            </div>
+            <div>
+                <p>WhatsApp</p>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer">+55 47 99990-6218</a>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Cia das Pizzas. Todos os direitos reservados.</p>
+    </footer>
+    <script src="bg-animation.js"></script>
+    <script src="cart.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seletores de tamanho: atualiza o preço
+        document.querySelectorAll('.xis-card').forEach(card => {
+            const sizeButtons = card.querySelectorAll('.size-btn');
+            const priceBadge = card.querySelector('.price-badge');
+
+            sizeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sizeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const price = parseFloat(btn.dataset.price).toFixed(2).replace('.', ',');
+                    priceBadge.textContent = `R$ ${price}`;
+                });
+            });
+        });
+
+        // Botões "Adicionar ao Pedido" - Xis
+        document.querySelectorAll('.xis-card .add-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.xis-card');
+                const name = card.dataset.name;
+                const activeSizeBtn = card.querySelector('.size-btn.active');
+                const size = activeSizeBtn.dataset.size;
+                const price = parseFloat(activeSizeBtn.dataset.price);
+
+                const itemName = `${name} (${size === 'P' ? '14cm' : '18cm'})`;
+                const sku = `xis-${name.toLowerCase().replace(/\s+/g, '-')}-${size}`;
+
+                // Usar o PizzariaCart global do cart.js
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: itemName,
+                        price: price,
+                        qty: 1
+                    });
+                    alert('Xis adicionado ao carrinho!');
+                } else {
+                    alert('Erro ao adicionar ao carrinho.');
+                }
+            });
+        });
+
+        // Botões "Adicionar" - Adicionais do Xis
+        document.querySelectorAll('.add-extra-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.extra-card');
+                const name = card.dataset.name;
+                const price = parseFloat(card.dataset.price);
+                const sku = `extra-xis-${name.toLowerCase().replace(/\s+/g, '-')}`;
+
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: `Adicional: ${name}`,
+                        price: price,
+                        qty: 1
+                    });
+                    alert('Adicional adicionado ao carrinho!');
+                } else {
+                    alert('Erro ao adicionar ao carrinho.');
+                }
+            });
+        });
+
+        // Botão de observações
+        document.getElementById('add-obs-xis').addEventListener('click', () => {
+            const textarea = document.getElementById('obs-xis');
+            const obs = textarea.value.trim();
+
+            if (obs) {
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: `obs-xis-${Date.now()}`,
+                        name: `📝 Observação: ${obs}`,
+                        price: 0,
+                        qty: 1
+                    });
+                    textarea.value = '';
+                    alert('Observação adicionada ao carrinho!');
+                }
+            } else {
+                alert('Escreva uma observação!');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

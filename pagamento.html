@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento e Entrega - Cia das Pizzas</title>
+    <meta name="description" content="Finalize seu pedido com endereço de entrega e método de pagamento.">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Preencha os dados para receber seu pedido com rapidez e segurança.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">Início</a>
+                <a href="pizza.html">Pizza</a>
+                <a href="xis.html">Xis</a>
+            </nav>
+        </div>
+    </header>
+            <script src="cart.js"></script>
+
+    <main class="container form-section">
+        <div class="form-card">
+            <div class="section-header">
+                <p class="eyebrow">Finalizar Pedido</p>
+                <h2>Dados de entrega e pagamento</h2>
+                <p>Informe o endereço corretamente e escolha o método de pagamento mais conveniente.</p>
+            </div>
+
+            <div id="resumo-pedido" class="form-group" style="margin-bottom:1.5rem;">
+                <legend style="display:block; font-weight:600; margin-bottom:0.5rem;">Resumo do pedido</legend>
+                <div id="resumo-itens"></div>
+                <div id="resumo-total" style="margin-top:0.75rem; font-weight:600;"></div>
+            </div>
+
+            <form id="form-pagamento">
+                <fieldset class="form-group">
+                    <legend>1. Endereço de entrega</legend>
+                    <input type="text" name="nome" placeholder="Nome completo" required class="campo-texto">
+                    <input type="text" name="telefone" placeholder="WhatsApp ou telefone" required class="campo-texto">
+                    <input type="text" name="endereco" placeholder="Rua e número" required class="campo-texto">
+                    <input type="text" name="bairro" placeholder="Bairro" required class="campo-texto">
+                    <input type="text" name="referencia" placeholder="Ponto de referência (opcional)" class="campo-texto">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <legend>2. Método de pagamento</legend>
+                    <div class="opcoes-selecao">
+                        <label><input type="radio" name="metodo-pagamento" value="pix" checked> Pix</label>
+                        <label><input type="radio" name="metodo-pagamento" value="cartao"> Cartão na entrega</label>
+                        <label><input type="radio" name="metodo-pagamento" value="dinheiro"> Dinheiro</label>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="button button-primary button-full" id="btn-confirmar">Confirmar e enviar pedido</button>
+            </form>
+
+            <a href="index.html" class="link-secondary">← Voltar para o cardápio</a>
+        </div>
+    </main>
+
+    <script>
+        function formatPrice(v){ return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
+
+        function aguardarCarrinho(cb){
+            // cart.js só termina de montar o carrinho no DOMContentLoaded;
+            // aqui garantimos que PizzariaCart já existe antes de usar.
+            if (window.PizzariaCart) cb();
+            else document.addEventListener('DOMContentLoaded', () => setTimeout(cb, 0));
+        }
+
+        aguardarCarrinho(() => {
+            // Garante que os dados salvos do carrinho já foram lidos do
+            // localStorage, independente da ordem de carregamento dos scripts.
+            window.PizzariaCart.load();
+
+            const resumoItens = document.getElementById('resumo-itens');
+            const resumoTotal = document.getElementById('resumo-total');
+            const carrinho = window.PizzariaCart.getCart();
+
+            if (carrinho.length === 0) {
+                resumoItens.innerHTML = '<p class="muted">Seu carrinho está vazio.</p>';
+                document.getElementById('btn-confirmar').disabled = true;
+            } else {
+                resumoItens.innerHTML = carrinho.map(it =>
+                    `<div style="display:flex; justify-content:space-between; padding:0.25rem 0;">
+                        <span>${it.qty}x ${it.name}</span>
+                        <span>${formatPrice(it.price * it.qty)}</span>
+                    </div>`
+                ).join('');
+            }
+            resumoTotal.textContent = 'Total: ' + formatPrice(window.PizzariaCart.getTotal());
+
+            const form = document.getElementById('form-pagamento');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const carrinhoAtual = window.PizzariaCart.getCart();
+                if (carrinhoAtual.length === 0) {
+                    alert('Seu carrinho está vazio. Adicione itens antes de finalizar o pedido.');
+                    return;
+                }
+
+                const fd = new FormData(form);
+                const pedido = {
+                    cliente: {
+                        nome: fd.get('nome'),
+                        telefone: fd.get('telefone'),
+                        endereco: fd.get('endereco'),
+                        bairro: fd.get('bairro'),
+                        referencia: fd.get('referencia') || ''
+                    },
+                    pagamento: fd.get('metodo-pagamento'),
+                    itens: carrinhoAtual.map(it => ({ nome: it.name, qty: it.qty, price: it.price })),
+                    total: window.PizzariaCart.getTotal()
+                };
+
+                const btn = document.getElementById('btn-confirmar');
+                const textoOriginal = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Enviando pedido para a cozinha...';
+
+                try {
+                    const resposta = await fetch('/api/pedidos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(pedido)
+                    });
+
+                    if (!resposta.ok) throw new Error('Falha ao enviar pedido');
+                    const resultado = await resposta.json();
+
+                    window.PizzariaCart.clearCart();
+                    window.location.href = `status.html?id=${resultado.id}`;
+                } catch (erro) {
+                    console.error('Erro ao enviar pedido:', erro);
+                    alert('Não foi possível enviar seu pedido para a cozinha. Verifique sua conexão e tente novamente.');
+                    btn.disabled = false;
+                    btn.textContent = textoOriginal;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

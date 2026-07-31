@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pizzas em Metro | Cia das Pizzas</title>
+    <meta name="description" content="Pizzas artesanais em metro com recheios tradicionais, especiais e doces.">
+    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Estilos do Montador de Pizzas */
+        .pizza-builder-box {
+            background: rgba(15, 20, 22, 0.7);
+            border: 1px solid rgba(196, 126, 58, 0.4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .pizza-size-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        .size-card-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(196, 126, 58, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem 0.5rem;
+            color: #e0ddd8;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .size-card-btn:hover {
+            border-color: #c47e3a;
+            background: rgba(196, 126, 58, 0.15);
+        }
+        .size-card-btn.active {
+            background: #c47e3a;
+            color: #fff;
+            border-color: #c47e3a;
+            font-weight: bold;
+        }
+        .size-card-btn small {
+            display: block;
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+        .flavor-card-selectable {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .flavor-card-selectable:hover {
+            border-color: rgba(196, 126, 58, 0.6);
+        }
+        .flavor-card-selectable.selected {
+            border-color: #c47e3a !important;
+            background: rgba(196, 126, 58, 0.15) !important;
+        }
+        .flavor-card-selectable.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .flavor-checkbox-hidden {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #c47e3a;
+        }
+        .summary-bar {
+            position: sticky;
+            bottom: 1rem;
+            z-index: 100;
+            background: #111719;
+            border: 2px solid #c47e3a;
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Pizza artesanal, crocância na medida e atendimento premium.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">← Voltar ao Início</a>
+                <a href="xis.html">Xis</a>
+                <a href="porcoes.html">Porções & Hot Dogs</a>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer" class="button button-secondary">WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Monte sua Pizza</p>
+                <h2>Passo 1: Escolha o Tamanho</h2>
+                <p>Selecione o tamanho ideal para ajustar o limite de sabores.</p>
+            </div>
+
+            <div class="pizza-builder-box">
+                <div class="pizza-size-grid">
+                    <button type="button" class="size-card-btn active" data-size="1/2 Metro" data-limit="3" data-price="110.90">
+                        <strong>1/2 Metro</strong>
+                        <small>24 pedaços • até 3 sabores</small>
+                        <small style="color: #c47e3a; font-weight: bold;">R$ 110,90</small>
+                    </button>
+
+                    <button type="button" class="size-card-btn" data-size="1/3 Metro" data-limit="3" data-price="97.90">
+                        <strong>1/3 Metro</strong>
+                        <small>18 pedaços • até 3 sabores</small>
+                        <small style="color: #c47e3a; font-weight: bold;">R$ 97,90</small>
+                    </button>
+
+                    <button type="button" class="size-card-btn" data-size="1/4 Metro" data-limit="2" data-price="78.90">
+                        <strong>1/4 Metro</strong>
+                        <small>12 pedaços • até 2 sabores</small>
+                        <small style="color: #c47e3a; font-weight: bold;">R$ 78,90</small>
+                    </button>
+
+                    <button type="button" class="size-card-btn" data-size="Porção Individual" data-limit="1" data-price="61.90">
+                        <strong>Individual</strong>
+                        <small>8 pedaços • 1 sabor</small>
+                        <small style="color: #c47e3a; font-weight: bold;">R$ 61,90</small>
+                    </button>
+
+                    <button type="button" class="size-card-btn" data-size="Mini (Kids)" data-limit="1" data-price="46.90">
+                        <strong>Mini / Kids</strong>
+                        <small>4 pedaços • 1 sabor</small>
+                        <small style="color: #c47e3a; font-weight: bold;">R$ 46,90</small>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; background: rgba(196, 126, 58, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(196, 126, 58, 0.3);">
+                <label style="display: block; color: #c47e3a; font-weight: 500; margin-bottom: 0.5rem;">Observações para a Pizza</label>
+                <textarea id="obs-pizza" placeholder="Ex: Tirar cebola de um dos lados, borda bem assada, etc." style="width: 100%; padding: 0.75rem; border: 1px solid rgba(196, 126, 58, 0.5); border-radius: 4px; background: rgba(15, 20, 22, 0.5); color: #e0ddd8; font-family: inherit; resize: vertical; min-height: 60px;"></textarea>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Passo 2: Escolha os Sabores</p>
+                <h2>Pizzas Salgadas Tradicionais</h2>
+            </div>
+
+            <div class="cardapio">
+                <article class="card flavor-card-selectable" data-flavor="Da Pizzaiola" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Da Pizzaiola</h3>
+                    <p>Molho, mussarela, champignon, bacon, milho, creme de leite e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Espanhola" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Espanhola</h3>
+                    <p>Molho, mussarela, milho, bacon, cebola e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Filé de Frango Acebolado" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Filé de Frango Acebolado</h3>
+                    <p>Molho, mussarela, filé de frango acebolado e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Filé Grelhado" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Filé Grelhado</h3>
+                    <p>Molho, mussarela, filé, cebola e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Florida" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Florida</h3>
+                    <p>Molho, mussarela, presunto, azeitonas e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Frango" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Frango</h3>
+                    <p>Molho, mussarela, frango e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Frango Escabelado" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Frango Escabelado</h3>
+                    <p>Molho, mussarela, frango, presunto, catupiry, batata palha e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Gaúcha" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Gaúcha</h3>
+                    <p>Molho, mussarela, presunto, calabresa, azeitonas, pimentão, tomate, ovos de codorna, cebola e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Lombinho" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Lombinho</h3>
+                    <p>Molho, mussarela, lombinho e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Lombo Canadense" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Lombo Canadense</h3>
+                    <p>Molho, mussarela, lombo canadense, palmito e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Marguerita" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Marguerita</h3>
+                    <p>Molho, mussarela, parmesão, tomate, manjericão e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Marguerita Especial" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Marguerita Especial</h3>
+                    <p>Molho, mussarela, parmesão, tomate, manjericão, azeitonas pretas e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Mexicana" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Mexicana</h3>
+                    <p>Molho, mussarela, calabresa, azeitonas, cebola, pimenta calabresa e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Milho" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Milho</h3>
+                    <p>Molho, mussarela, milho e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Moda da Casa" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Moda da Casa</h3>
+                    <p>Molho, mussarela, presunto, bacon, filé, tomate, ovo de codorna e catupiry.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Mussarela" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Mussarela</h3>
+                    <p>Molho, mussarela, pesto e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Nobre" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Nobre</h3>
+                    <p>Molho, mussarela, coração, strogonoff de carne, strogonoff de frango e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Palmito" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Palmito</h3>
+                    <p>Molho, mussarela, palmito e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Paraguaia" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Paraguaia</h3>
+                    <p>Molho, mussarela, palmito, milho, ervilha e orégano.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Pepperoni" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Pepperoni</h3>
+                    <p>Molho, mussarela, pepperoni, tomate, pimentão, champignon e orégano.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">+ R$ 10,00 por sabor especial</p>
+                <h2>Pizzas Especiais</h2>
+            </div>
+
+            <div class="cardapio">
+                <article class="card flavor-card-selectable" data-flavor="Carne Seca" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Carne Seca</h3>
+                    <p>Carne seca e cream cheese.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Costela" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Costela</h3>
+                    <p>Costela, pimenta biquinho e barbecue.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Nachos" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Nachos</h3>
+                    <p>Carne moída e nachos.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Napolitana" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Napolitana</h3>
+                    <p>Mussarela de búfala, parmesão, tomate e manjericão.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Presunto Parma" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Presunto Parma</h3>
+                    <p>Mussarela de búfala, tomate e presunto Parma.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Tomate Seco Especial" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Tomate Seco Especial</h3>
+                    <p>Mussarela de búfala, tomate seco e rúcula.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Mineira" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Mineira</h3>
+                    <p>Mussarela, coco, abacaxi e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Nutella" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Nutella</h3>
+                    <p>Nutella e morango.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Tentação Branca" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Tentação Branca</h3>
+                    <p>Chocolate branco, coco, morango e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Tentação Preta" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Tentação Preta</h3>
+                    <p>Chocolate, coco, morango e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Banana com Gemada Especial" data-extra="10">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Banana com Gemada Especial</h3>
+                    <p>Banana, mussarela, gemada e canela.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Sobremesas</p>
+                <h2>Pizzas Doces</h2>
+            </div>
+
+            <div class="cardapio">
+                <article class="card flavor-card-selectable" data-flavor="Banana com Gemada" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Banana com Gemada</h3>
+                    <p>Banana, gemada e canela.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Banana Split" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Banana Split</h3>
+                    <p>Leite condensado, banana, chocolate preto ou branco e canela.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Califórnia" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Califórnia</h3>
+                    <p>Mussarela, pêssego, abacaxi, figo, cereja e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Chocolate Preto" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Chocolate Preto</h3>
+                    <p>Chocolate preto e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Chocolate Branco" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Chocolate Branco</h3>
+                    <p>Chocolate branco e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Coco" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Coco</h3>
+                    <p>Coco e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Crocante" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Crocante</h3>
+                    <p>Chocolate preto, amendoim e granulado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Goiabada" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Goiabada</h3>
+                    <p>Mussarela e goiabada.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Prestígio" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Prestígio</h3>
+                    <p>Chocolate preto e coco.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Sensação Branco" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Sensação Branco</h3>
+                    <p>Chocolate branco, morango e leite condensado.</p>
+                </article>
+                <article class="card flavor-card-selectable" data-flavor="Sensação Preto" data-extra="0">
+                    <input type="checkbox" class="flavor-checkbox-hidden">
+                    <h3>Sensação Preto</h3>
+                    <p>Chocolate preto, morango e leite condensado.</p>
+                </article>
+            </div>
+        </section>
+
+        <div class="summary-bar">
+            <div>
+                <span style="font-size: 0.85rem; color: #aaa; display: block;">Resumo do Pedido:</span>
+                <strong id="summary-size" style="color: #fff; font-size: 1.05rem;">Pizza 1/2 Metro</strong> 
+                <span style="color: #aaa;">• Sabores: <strong id="selected-count" style="color: #c47e3a;">0</strong>/<strong id="max-count">3</strong></span>
+                <p id="summary-flavors" style="font-size: 0.85rem; color: #e0ddd8; margin-top: 2px;">Nenhum sabor selecionado</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
+                <div style="text-align: right;">
+                    <span style="font-size: 0.75rem; color: #aaa; display: block;">Valor Total</span>
+                    <strong id="total-price" style="font-size: 1.3rem; color: #c47e3a;">R$ 110,90</strong>
+                </div>
+                <button type="button" class="button button-primary" id="add-pizza-to-cart" style="padding: 0.8rem 1.2rem;">Adicionar ao Pedido</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h4>Cia das Pizzas</h4>
+                <p>Balneário Camboriú / SC</p>
+            </div>
+            <div>
+                <p>WhatsApp</p>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer">+55 47 99990-6218</a>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Cia das Pizzas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="bg-animation.js"></script>
+    <script src="cart.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentSizeName = '1/2 Metro';
+        let currentLimit = 3;
+        let basePrice = 110.90;
+
+        const sizeButtons = document.querySelectorAll('.size-card-btn');
+        const flavorCards = document.querySelectorAll('.flavor-card-selectable');
+        const summarySize = document.getElementById('summary-size');
+        const summaryFlavors = document.getElementById('summary-flavors');
+        const selectedCountEl = document.getElementById('selected-count');
+        const maxCountEl = document.getElementById('max-count');
+        const totalPriceEl = document.getElementById('total-price');
+        const addPizzaBtn = document.getElementById('add-pizza-to-cart');
+
+        // 1. Troca de Tamanho
+        sizeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                sizeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                currentSizeName = btn.dataset.size;
+                currentLimit = parseInt(btn.dataset.limit);
+                basePrice = parseFloat(btn.dataset.price);
+
+                summarySize.textContent = `Pizza ${currentSizeName}`;
+                maxCountEl.textContent = currentLimit;
+
+                updateSelectionState();
+            });
+        });
+
+        // 2. Clique nos Cards de Sabores
+        flavorCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const checkbox = card.querySelector('.flavor-checkbox-hidden');
+                
+                // Impede loop de clique duplo se clicar no checkbox diretamente
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+
+                if (checkbox.checked) {
+                    const checkedCount = document.querySelectorAll('.flavor-checkbox-hidden:checked').length;
+                    if (checkedCount > currentLimit) {
+                        checkbox.checked = false; // Bloqueia seleção acima do limite
+                    }
+                }
+
+                updateSelectionState();
+            });
+        });
+
+        // 3. Atualiza UI, Preço e Limites
+        function updateSelectionState() {
+            const checkedCards = Array.from(document.querySelectorAll('.flavor-card-selectable')).filter(card => {
+                return card.querySelector('.flavor-checkbox-hidden').checked;
+            });
+
+            const currentCount = checkedCards.length;
+            selectedCountEl.textContent = currentCount;
+
+            // Calcula Adicionais (+ R$ 10 por sabor especial)
+            let extrasTotal = 0;
+            const selectedNames = [];
+
+            flavorCards.forEach(card => {
+                const chk = card.querySelector('.flavor-checkbox-hidden');
+                const extra = parseFloat(card.dataset.extra) || 0;
+                const flavorName = card.dataset.flavor;
+
+                if (chk.checked) {
+                    card.classList.add('selected');
+                    extrasTotal += extra;
+                    selectedNames.push(extra > 0 ? `${flavorName} (+R$10)` : flavorName);
+                } else {
+                    card.classList.remove('selected');
+                }
+
+                // Desabilita visualmente se o limite for atingido
+                if (!chk.checked && currentCount >= currentLimit) {
+                    card.classList.add('disabled');
+                } else {
+                    card.classList.remove('disabled');
+                }
+            });
+
+            // Atualiza Texto dos Sabores
+            if (selectedNames.length > 0) {
+                summaryFlavors.textContent = selectedNames.join(' + ');
+            } else {
+                summaryFlavors.textContent = 'Nenhum sabor selecionado';
+            }
+
+            // Atualiza Preço Total
+            const finalPrice = basePrice + extrasTotal;
+            totalPriceEl.textContent = `R$ ${finalPrice.toFixed(2).replace('.', ',')}`;
+        }
+
+        // 4. Adicionar Pizza ao Carrinho (Integrado ao PizzariaCart)
+        if (addPizzaBtn) {
+            addPizzaBtn.addEventListener('click', () => {
+                const checkedCards = Array.from(document.querySelectorAll('.flavor-card-selectable')).filter(card => {
+                    return card.querySelector('.flavor-checkbox-hidden').checked;
+                });
+
+                if (checkedCards.length === 0) {
+                    alert('Selecione pelo menos 1 sabor para sua pizza!');
+                    return;
+                }
+
+                const selectedFlavors = checkedCards.map(c => c.dataset.flavor);
+                let extrasTotal = 0;
+                checkedCards.forEach(c => extrasTotal += (parseFloat(c.dataset.extra) || 0));
+
+                const finalPrice = basePrice + extrasTotal;
+                const obs = document.getElementById('obs-pizza').value.trim();
+                
+                let pizzaTitle = `Pizza ${currentSizeName} (${selectedFlavors.join(' / ')})`;
+                if (obs) {
+                    pizzaTitle += ` | Obs: ${obs}`;
+                }
+
+                const sku = `pizza-${currentSizeName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now()}`;
+
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: pizzaTitle,
+                        price: finalPrice,
+                        qty: 1
+                    });
+
+                    // Feedback Visual no Botão
+                    const originalText = addPizzaBtn.textContent;
+                    addPizzaBtn.textContent = '✓ Adicionada!';
+                    addPizzaBtn.style.backgroundColor = '#2e7d32';
+
+                    // Reseta montador
+                    document.querySelectorAll('.flavor-checkbox-hidden').forEach(chk => chk.checked = false);
+                    document.getElementById('obs-pizza').value = '';
+                    updateSelectionState();
+
+                    setTimeout(() => {
+                        addPizzaBtn.textContent = originalText;
+                        addPizzaBtn.style.backgroundColor = '';
+                    }, 1500);
+                } else {
+                    console.error('PizzariaCart não encontrado.');
+                }
+            });
+        }
+    });
+    </script>
+</body>
+</html>

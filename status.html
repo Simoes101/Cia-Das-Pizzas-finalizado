@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status do Pedido - Cia das Pizzas</title>
+    <meta name="description" content="Acompanhe o status do seu pedido e entre em contato com a nossa equipe se precisar alterar algo.">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Seu pedido está a caminho. Veja o status e fale conosco se necessário.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">Início</a>
+                <a href="pizza.html">Pizza</a>
+                <a href="xis.html">Xis</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container form-section">
+        <div class="status-card">
+            <div class="section-header" style="text-align: center;">
+                <p class="eyebrow">Status do pedido</p>
+                <h2>Pedido confirmado</h2>
+                <p id="numero-pedido" style="font-weight:600;"></p>
+                <p>Estamos preparando seu pedido com cuidado. Em breve ele sai para entrega.</p>
+            </div>
+
+            <div class="status-step active">
+                <span class="icon">✓</span>
+                <div>
+                    <strong>Pedido recebido</strong>
+                    <p>Recebemos as informações e já iniciamos o preparo.</p>
+                </div>
+            </div>
+
+            <div class="status-step active">
+                <span class="icon">👨‍🍳</span>
+                <div>
+                    <strong>Na cozinha</strong>
+                    <p>Nossos chefs estão finalizando o pedido com ingredientes frescos.</p>
+                </div>
+            </div>
+
+            <div class="status-step">
+                <span class="icon">🛵</span>
+                <div>
+                    <strong>Saiu para entrega</strong>
+                    <p>Seu pedido está a caminho. Acompanhe pelo WhatsApp.</p>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top: 1.5rem; text-align: center;">
+                <p class="eyebrow">Tempo estimado</p>
+                <h2 style="margin: 0; color: #e67e22;">35 - 50 min</h2>
+            </div>
+
+            <a href="https://wa.me/5547999906218" target="_blank" class="button button-primary button-full" style="text-align: center;">Chamar no WhatsApp</a>
+            <a href="index.html" class="link-secondary" style="display: block; text-align: center;">← Voltar para a página inicial</a>
+        </div>
+    </main>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const el = document.getElementById('numero-pedido');
+        if (id && el) el.textContent = `Pedido #${id}`;
+        else if (el) el.remove();
+    </script>
+</body>
+</html>

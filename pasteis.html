@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pastéis Artesanais | Cia das Pizzas</title>
+    <meta name="description" content="Pastéis crocantes e recheados, disponíveis nos tamanhos M e G, salgados e doces.">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <span class="brand-name">Cia das Pizzas</span>
+                <p class="brand-copy">Pizza artesanal, crocância na medida e atendimento premium.</p>
+            </div>
+            <nav class="site-nav">
+                <a href="index.html">← Voltar ao Início</a>
+                <a href="xis.html">Xis</a>
+                <a href="porcoes.html">Porções & Hot Dogs</a>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer" class="button button-secondary">WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Massa Crocante & Recheio Generoso</p>
+                <h2>Pastéis Salgados</h2>
+                <p>Escolha o tamanho para ver o valor e adicionar ao seu pedido.</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem; background: rgba(196, 126, 58, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(196, 126, 58, 0.3);">
+                <label style="display: block; color: #c47e3a; font-weight: 500; margin-bottom: 0.5rem;">Observações para Pastéis</label>
+                <textarea id="obs-pasteis" placeholder="Ex: Pastel bem crocante, sem cebola, etc." style="width: 100%; padding: 0.75rem; border: 1px solid rgba(196, 126, 58, 0.5); border-radius: 4px; background: rgba(15, 20, 22, 0.5); color: #e0ddd8; font-family: inherit; resize: vertical; min-height: 80px;"></textarea>
+                <button class="button button-secondary" style="margin-top: 0.5rem; padding: 0.6rem 1rem; font-size: 0.85rem;" id="add-obs-pasteis">Adicionar Observação</button>
+            </div>
+
+            <div class="cardapio">
+                <article class="card pastel-card" data-name="Pastel de Carne" data-price-m="28.00" data-price-g="32.00">
+                    <div class="card-header">
+                        <h3>Carne</h3>
+                        <span class="price-badge">R$ 28,00</span>
+                    </div>
+                    <p class="card-desc">Carne moída temperada e ovo.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="28.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="32.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Carne e Queijo" data-price-m="30.00" data-price-g="34.00">
+                    <div class="card-header">
+                        <h3>Carne e Queijo</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Carne moída temperada com queijo derretido.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="30.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="34.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Strogonoff de Carne" data-price-m="29.00" data-price-g="32.00">
+                    <div class="card-header">
+                        <h3>Strogonoff de Carne</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Strogonoff de carne ao molho cremoso da casa.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="29.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="32.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Strogonoff de Frango" data-price-m="28.00" data-price-g="31.00">
+                    <div class="card-header">
+                        <h3>Strogonoff de Frango</h3>
+                        <span class="price-badge">R$ 28,00</span>
+                    </div>
+                    <p class="card-desc">Strogonoff de frango super cremoso.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="28.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="31.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Frango" data-price-m="25.00" data-price-g="28.00">
+                    <div class="card-header">
+                        <h3>Frango</h3>
+                        <span class="price-badge">R$ 25,00</span>
+                    </div>
+                    <p class="card-desc">Frango desfiado ao molho especial.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="25.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="28.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Bacon" data-price-m="28.00" data-price-g="31.00">
+                    <div class="card-header">
+                        <h3>Bacon</h3>
+                        <span class="price-badge">R$ 28,00</span>
+                    </div>
+                    <p class="card-desc">Tomate, milho, ervilha, queijo e bastante bacon.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="28.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="31.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel Vegetariano" data-price-m="25.00" data-price-g="30.00">
+                    <div class="card-header">
+                        <h3>Vegetariano</h3>
+                        <span class="price-badge">R$ 25,00</span>
+                    </div>
+                    <p class="card-desc">Brócolis, palmito, tomate e queijo derretido.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="25.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="30.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Presunto e Queijo" data-price-m="29.00" data-price-g="31.00">
+                    <div class="card-header">
+                        <h3>Presunto e Queijo</h3>
+                        <span class="price-badge">R$ 29,00</span>
+                    </div>
+                    <p class="card-desc">Presunto fatiado e queijo mussarela.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="29.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="31.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Queijo" data-price-m="28.00" data-price-g="32.00">
+                    <div class="card-header">
+                        <h3>Queijo</h3>
+                        <span class="price-badge">R$ 28,00</span>
+                    </div>
+                    <p class="card-desc">Muito queijo mussarela especial derretido.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="28.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="32.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Sobremesas</p>
+                <h2>Pastéis Doces</h2>
+            </div>
+
+            <div class="cardapio">
+                <article class="card pastel-card" data-name="Pastel Romeo e Julieta" data-price-m="21.00" data-price-g="23.00">
+                    <div class="card-header">
+                        <h3>Romeo e Julieta</h3>
+                        <span class="price-badge">R$ 21,00</span>
+                    </div>
+                    <p class="card-desc">Combinação clássica de queijo com goiabada.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="21.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="23.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Banana" data-price-m="21.00" data-price-g="23.00">
+                    <div class="card-header">
+                        <h3>Banana</h3>
+                        <span class="price-badge">R$ 21,00</span>
+                    </div>
+                    <p class="card-desc">Banana fatiada, canela e queijo mussarela.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="21.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="23.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+
+                <article class="card pastel-card" data-name="Pastel de Chocolate" data-price-m="30.00" data-price-g="33.00">
+                    <div class="card-header">
+                        <h3>Pastel de Chocolate</h3>
+                        <span class="price-badge">R$ 30,00</span>
+                    </div>
+                    <p class="card-desc">Recheio cremoso e generoso de chocolate.</p>
+                    <div class="size-selector">
+                        <button type="button" class="size-btn active" data-size="M" data-price="30.00">Médio (M)</button>
+                        <button type="button" class="size-btn" data-size="G" data-price="33.00">Grande (G)</button>
+                    </div>
+                    <button class="button button-primary add-btn">Adicionar ao Pedido</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <p class="eyebrow">Turbine seu pastel</p>
+                <h2>Adicionais (+ R$ 5,00 cada)</h2>
+            </div>
+            <div class="cardapio-extras">
+                <article class="card extra-card" data-name="Palmito" data-price="5.00">
+                    <h3>Palmito</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Ovo" data-price="5.00">
+                    <h3>Ovo</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Tomate" data-price="5.00">
+                    <h3>Tomate</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Azeitona" data-price="5.00">
+                    <h3>Azeitona</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+
+                <article class="card extra-card" data-name="Queijo Extra" data-price="5.00">
+                    <h3>Queijo Extra</h3>
+                    <p class="price">R$ 5,00</p>
+                    <button class="button button-primary add-extra-btn">Adicionar</button>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h4>Cia das Pizzas</h4>
+                <p>Balneário Camboriú / SC</p>
+            </div>
+            <div>
+                <p>WhatsApp</p>
+                <a href="https://wa.me/5547999906218" target="_blank" rel="noopener noreferrer">+55 47 99990-6218</a>
+            </div>
+        </div>
+        <p class="footer-note">&copy; 2026 Cia das Pizzas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="bg-animation.js"></script>
+    <script src="cart.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Seletores de tamanho: atualiza o preço
+        document.querySelectorAll('.pastel-card').forEach(card => {
+            const sizeButtons = card.querySelectorAll('.size-btn');
+            const priceBadge = card.querySelector('.price-badge');
+
+            sizeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sizeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const price = parseFloat(btn.dataset.price).toFixed(2).replace('.', ',');
+                    priceBadge.textContent = `R$ ${price}`;
+                });
+            });
+        });
+
+        // Botões "Adicionar ao Pedido" - Pastéis
+        document.querySelectorAll('.pastel-card .add-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.pastel-card');
+                const name = card.dataset.name;
+                const activeSizeBtn = card.querySelector('.size-btn.active');
+                const size = activeSizeBtn.dataset.size;
+                const price = parseFloat(activeSizeBtn.dataset.price);
+
+                const itemName = `${name} (${size === 'M' ? 'Médio' : 'Grande'})`;
+                const sku = `pastel-${name.toLowerCase().replace(/\s+/g, '-')}-${size}`;
+
+                // Usar o PizzariaCart global do cart.js
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: itemName,
+                        price: price,
+                        qty: 1
+                    });
+                    alert('Pastel adicionado ao carrinho!');
+                } else {
+                    alert('Erro ao adicionar ao carrinho.');
+                }
+            });
+        });
+
+        // Botões "Adicionar ao Pedido" - Adicionais
+        document.querySelectorAll('.add-extra-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const card = e.target.closest('.extra-card');
+                const name = card.dataset.name;
+                const price = parseFloat(card.dataset.price);
+
+                const sku = `extra-${name.toLowerCase().replace(/\s+/g, '-')}`;
+
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: sku,
+                        name: `Adicional: ${name}`,
+                        price: price,
+                        qty: 1
+                    });
+                    alert('Adicional adicionado ao carrinho!');
+                } else {
+                    alert('Erro ao adicionar ao carrinho.');
+                }
+            });
+        });
+
+        // Botão de observações
+        document.getElementById('add-obs-pasteis').addEventListener('click', () => {
+            const textarea = document.getElementById('obs-pasteis');
+            const obs = textarea.value.trim();
+
+            if (obs) {
+                if (window.PizzariaCart && typeof window.PizzariaCart.addItem === 'function') {
+                    window.PizzariaCart.addItem({
+                        sku: `obs-pasteis-${Date.now()}`,
+                        name: `📝 Observação: ${obs}`,
+                        price: 0,
+                        qty: 1
+                    });
+                    textarea.value = '';
+                    alert('Observação adicionada ao carrinho!');
+                }
+            } else {
+                alert('Escreva uma observação!');
+            }
+        });
+    });
+    </script>
+</body>
+</html>
