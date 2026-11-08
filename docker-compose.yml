@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATA_DIR: /data
+      PORT: 3000
+    volumes:
+      - orders:/data
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  orders:
