@@ -1,82 +1,182 @@
 const express = require('express');
+const fs = require('fs');
 const http = require('http');
-const { Server } = require('socket.io');
-const cors = require('cors');
+const os = require('os');
+const path = require('path');
+const { timingSafeEqual } = require('crypto');
 
 const app = express();
-app.use(cors());
-app.use(express.json({ limit: '1mb' }));
-
-// Serve os arquivos do seu site (HTML, CSS, JS) - o mesmo servidor
-// entrega o site pro cliente E recebe/distribui os pedidos.
-app.use(express.static(__dirname));
-
 const server = http.createServer(app);
 
-// Configuração do Socket.io
-const io = new Server(server, {
-  cors: { origin: '*' }
+const dataDirectory = process.env.DATA_DIR || path.join(os.homedir(), '.cia-das-pizzas');
+const ordersFile = path.join(dataDirectory, 'pedidos.json');
+const kitchenPassword = process.env.KITCHEN_PASSWORD;
+
+if (process.env.NODE_ENV === 'production' && !kitchenPassword) {
+    throw new Error('Configure KITCHEN_PASSWORD antes de iniciar em produção.');
+}
+
+fs.mkdirSync(dataDirectory, { recursive: true });
+
+let orders;
+let nextOrderId;
+
+try {
+    const savedData = JSON.parse(fs.readFileSync(ordersFile, 'utf8'));
+    if (!Array.isArray(savedData.pedidos) || !Number.isInteger(savedData.proximoId)) {
+        throw new Error('Formato inválido no arquivo de pedidos.');
+    }
+    orders = savedData.pedidos;
+    nextOrderId = savedData.proximoId;
+} catch (error) {
+    if (error.code !== 'ENOENT') {
+        throw new Error(`Não foi possível carregar ${ordersFile}: ${error.message}`);
+    }
+    orders = [];
+    nextOrderId = 1000;
+}
+
+function saveOrders(updatedOrders, updatedNextOrderId) {
+    const temporaryFile = `${ordersFile}.tmp`;
+    fs.writeFileSync(temporaryFile, JSON.stringify({
+        proximoId: updatedNextOrderId,
+        pedidos: updatedOrders
+    }, null, 2), 'utf8');
+    fs.renameSync(temporaryFile, ordersFile);
+}
+
+function authenticateKitchen(req, res, next) {
+    if (!kitchenPassword) return next();
+
+    const authorization = req.get('authorization') || '';
+    const encodedCredentials = authorization.match(/^Basic\s+(.+)$/i);
+    if (encodedCredentials) {
+        const credentials = Buffer.from(encodedCredentials[1], 'base64').toString('utf8');
+        const separator = credentials.indexOf(':');
+        const username = credentials.slice(0, separator);
+        const suppliedPassword = credentials.slice(separator + 1);
+        const suppliedBuffer = Buffer.from(suppliedPassword);
+        const expectedBuffer = Buffer.from(kitchenPassword);
+
+        if (separator > 0 && username === 'cozinha'
+            && suppliedBuffer.length === expectedBuffer.length
+            && timingSafeEqual(suppliedBuffer, expectedBuffer)) {
+            return next();
+        }
+    }
+
+    res.set('WWW-Authenticate', 'Basic realm="Cia das Pizzas - Cozinha", charset="UTF-8"');
+    return res.status(401).send('Acesso restrito ao painel da cozinha.');
+}
+
+function normalizeOrder(body) {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+        return null;
+    }
+
+    const customer = body.cliente;
+    if (!customer || typeof customer !== 'object' || Array.isArray(customer)
+        || typeof customer.nome !== 'string' || !customer.nome.trim()
+        || typeof customer.telefone !== 'string' || !customer.telefone.trim()
+        || !Array.isArray(body.itens) || body.itens.length === 0 || body.itens.length > 50) {
+        return null;
+    }
+
+    const items = [];
+    for (const item of body.itens) {
+        if (!item || typeof item !== 'object') return null;
+
+        const name = typeof item.name === 'string' ? item.name.trim()
+            : typeof item.nome === 'string' ? item.nome.trim() : '';
+        const qty = Number(item.qty ?? item.qtd);
+        const price = Number(item.price);
+
+        if (!name || name.length > 200 || !Number.isInteger(qty) || qty < 1 || qty > 99
+            || !Number.isFinite(price) || price < 0 || price > 100000) {
+            return null;
+        }
+
+        items.push({ name, qty, price });
+    }
+
+    const paymentMethods = ['pix', 'cartao', 'dinheiro'];
+    const payment = paymentMethods.includes(body.pagamento) ? body.pagamento : null;
+    if (!payment) return null;
+
+    const lineTotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const total = Math.round((lineTotal + Number.EPSILON) * 100) / 100;
+
+    return {
+        cliente: {
+            nome: customer.nome.trim().slice(0, 120),
+            telefone: customer.telefone.trim().slice(0, 40),
+            rua: String(customer.rua || customer.endereco || '').trim().slice(0, 160),
+            numero: String(customer.numero || '').trim().slice(0, 30),
+            bairro: String(customer.bairro || '').trim().slice(0, 100),
+            obs: String(customer.obs || customer.referencia || '').trim().slice(0, 300)
+        },
+        pagamento: payment,
+        itens: items,
+        total,
+        obsGeral: String(body.obsGeral || '').trim().slice(0, 500)
+    };
+}
+
+app.use(express.json({ limit: '100kb' }));
+
+app.get('/cozinha.html', authenticateKitchen, (req, res) => {
+    res.sendFile(path.join(__dirname, 'cozinha.html'));
 });
 
-// Guarda os últimos pedidos em memória, para a tela da cozinha
-// conseguir recuperar o histórico caso a página seja recarregada.
-const PEDIDOS_EM_MEMORIA = [];
-const LIMITE_HISTORICO = 100;
-let proximoId = 1000;
-
-io.on('connection', (socket) => {
-  console.log('⚡ Cozinha conectada em tempo real!');
-
-  // Quando a tela da cozinha conecta (ou reconecta), manda o
-  // histórico recente para ela não perder nenhum pedido.
-  socket.emit('historico_pedidos', PEDIDOS_EM_MEMORIA);
-
-  socket.on('pedido_impresso', (pedidoId) => {
-    const pedido = PEDIDOS_EM_MEMORIA.find(p => p.id === pedidoId);
-    if (pedido) pedido.impresso = true;
-  });
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok' });
 });
 
-// Rota para receber os pedidos reais do site (feito pelo cliente em casa)
-app.post('/api/pedidos', (req, res) => {
-  const dados = req.body || {};
+app.post('/api/pedidos', (req, res, next) => {
+    const orderData = normalizeOrder(req.body);
+    if (!orderData) {
+        return res.status(400).json({ mensagem: 'Confira os dados do cliente, pagamento e itens do pedido.' });
+    }
 
-  if (!dados.cliente || !dados.cliente.nome || !Array.isArray(dados.itens) || dados.itens.length === 0) {
-    return res.status(400).json({ status: 'erro', mensagem: 'Dados do pedido incompletos.' });
-  }
+    const newOrder = {
+        id: nextOrderId,
+        ...orderData,
+        criadoEm: new Date().toISOString()
+    };
+    const updatedOrders = [...orders, newOrder];
 
-  const novoPedido = {
-    id: proximoId++,
-    cliente: dados.cliente,
-    pagamento: dados.pagamento || 'não informado',
-    itens: dados.itens,
-    total: dados.total || 0,
-    obsGeral: dados.obsGeral || '',
-    criadoEm: new Date().toISOString(),
-    impresso: false
-  };
+    try {
+        saveOrders(updatedOrders, nextOrderId + 1);
+    } catch (error) {
+        return next(error);
+    }
 
-  PEDIDOS_EM_MEMORIA.push(novoPedido);
-  if (PEDIDOS_EM_MEMORIA.length > LIMITE_HISTORICO) PEDIDOS_EM_MEMORIA.shift();
-
-  console.log(`📦 Pedido #${novoPedido.id} recebido do cliente: ${novoPedido.cliente.nome}`);
-
-  // Dispara o pedido direto para a tela da cozinha, que vai imprimir
-  io.emit('novo_pedido', novoPedido);
-
-  res.status(201).json({ status: 'sucesso', mensagem: 'Pedido enviado para a cozinha!', id: novoPedido.id });
+    orders = updatedOrders;
+    nextOrderId += 1;
+    console.log(`Pedido #${newOrder.id} recebido de ${newOrder.cliente.nome}.`);
+    return res.status(201).json({ status: 'sucesso', id: newOrder.id, pedido: newOrder });
 });
 
-// Rota auxiliar para consultar o status de um pedido pelo id
-app.get('/api/pedidos/:id', (req, res) => {
-  const pedido = PEDIDOS_EM_MEMORIA.find(p => p.id === Number(req.params.id));
-  if (!pedido) return res.status(404).json({ status: 'erro', mensagem: 'Pedido não encontrado.' });
-  res.json(pedido);
+app.get('/api/pedidos', authenticateKitchen, (req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.json(orders.slice(-100));
 });
 
-// Inicia o servidor. Em produção (Render, Railway etc.) a porta vem
-// da variável de ambiente PORT; localmente cai na 3000.
-const PORTA = process.env.PORT || 3000;
-server.listen(PORTA, () => {
-  console.log(`\n🚀 Servidor da Pizzaria rodando na porta: ${PORTA}`);
+app.use(express.static(__dirname, { index: 'index.html' }));
+
+app.use((error, req, res, next) => {
+    console.error('Erro ao processar a solicitação:', error);
+    if (res.headersSent) return next(error);
+    if (error.type === 'entity.parse.failed') {
+        return res.status(400).json({ mensagem: 'O corpo da solicitação não contém JSON válido.' });
+    }
+    if (error.type === 'entity.too.large') {
+        return res.status(413).json({ mensagem: 'O pedido enviado excede o tamanho permitido.' });
+    }
+    return res.status(500).json({ mensagem: 'Não foi possível processar a solicitação.' });
+});
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    console.log(`Cia das Pizzas disponível na porta ${port}.`);
 });

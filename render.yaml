@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: cia-das-pizzas
+    runtime: node
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    disk:
+      name: pedidos
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: KITCHEN_PASSWORD
+        sync: false

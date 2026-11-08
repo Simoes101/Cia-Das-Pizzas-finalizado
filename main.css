@@ -570,7 +570,7 @@ label:has(input:checked) {
 /* Cart panel styles */
 #cart-panel {
     position: fixed;
-    right: 20px;
+    left: 20px;
     bottom: 20px;
     z-index: 9999;
     font-family: inherit;
@@ -618,6 +618,35 @@ label:has(input:checked) {
 .cart-total { font-weight:700; margin-bottom:0.6rem; }
 .cart-actions { display:flex; gap:0.5rem; }
 .cart-actions .button { flex:1; }
+
+@media (max-width: 600px) {
+    #cart-panel {
+        left: 12px;
+        bottom: 12px;
+    }
+    #cart-toggle {
+        width: 48px;
+        height: 48px;
+        padding: 0.25rem;
+        font-size: 0;
+    }
+    #cart-toggle::after {
+        content: "🛒";
+        font-size: 1.25rem;
+    }
+    #cart-badge {
+        position: absolute;
+        top: -0.25rem;
+        right: -0.25rem;
+        font-size: 0.75rem;
+        margin: 0;
+    }
+    #cart-drawer {
+        left: 0;
+        right: auto;
+        width: min(320px, calc(100vw - 24px));
+    }
+}
 
 /* Estilização Profissional dos Cards de Pastel */
 .pastel-card {
@@ -764,4 +793,3 @@ label:has(input:checked) {
     font-size: 0.9rem;
     margin-top: auto;
 }
-

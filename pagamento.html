@@ -21,7 +21,7 @@
             </nav>
         </div>
     </header>
-            <script src="cart.js"></script>
+    <script src="cart.js"></script>
 
     <main class="container form-section">
         <div class="form-card">
@@ -42,7 +42,9 @@
                     <legend>1. Endereço de entrega</legend>
                     <input type="text" name="nome" placeholder="Nome completo" required class="campo-texto">
                     <input type="text" name="telefone" placeholder="WhatsApp ou telefone" required class="campo-texto">
-                    <input type="text" name="endereco" placeholder="Rua e número" required class="campo-texto">
+                    <!-- AJUSTE 1: Dividido em Rua e Número para o layout do cupom de impressão -->
+                    <input type="text" name="rua" placeholder="Rua / Avenida" required class="campo-texto">
+                    <input type="text" name="numero" placeholder="Número" required class="campo-texto">
                     <input type="text" name="bairro" placeholder="Bairro" required class="campo-texto">
                     <input type="text" name="referencia" placeholder="Ponto de referência (opcional)" class="campo-texto">
                 </fieldset>
@@ -67,15 +69,11 @@
         function formatPrice(v){ return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
 
         function aguardarCarrinho(cb){
-            // cart.js só termina de montar o carrinho no DOMContentLoaded;
-            // aqui garantimos que PizzariaCart já existe antes de usar.
             if (window.PizzariaCart) cb();
             else document.addEventListener('DOMContentLoaded', () => setTimeout(cb, 0));
         }
 
         aguardarCarrinho(() => {
-            // Garante que os dados salvos do carrinho já foram lidos do
-            // localStorage, independente da ordem de carregamento dos scripts.
             window.PizzariaCart.load();
 
             const resumoItens = document.getElementById('resumo-itens');
@@ -106,17 +104,21 @@
                 }
 
                 const fd = new FormData(form);
+
+                // AJUSTE 2: Montando a estrutura exata que o index.js espera receber
                 const pedido = {
                     cliente: {
                         nome: fd.get('nome'),
                         telefone: fd.get('telefone'),
-                        endereco: fd.get('endereco'),
+                        rua: fd.get('rua'),
+                        numero: fd.get('numero'),
                         bairro: fd.get('bairro'),
-                        referencia: fd.get('referencia') || ''
+                        obs: fd.get('referencia') || ''
                     },
                     pagamento: fd.get('metodo-pagamento'),
-                    itens: carrinhoAtual.map(it => ({ nome: it.name, qty: it.qty, price: it.price })),
-                    total: window.PizzariaCart.getTotal()
+                    itens: carrinhoAtual.map(it => ({ name: it.name, qty: it.qty, price: it.price })),
+                    total: window.PizzariaCart.getTotal(),
+                    obsGeral: ''
                 };
 
                 const btn = document.getElementById('btn-confirmar');
@@ -138,7 +140,7 @@
                     window.location.href = `status.html?id=${resultado.id}`;
                 } catch (erro) {
                     console.error('Erro ao enviar pedido:', erro);
-                    alert('Não foi possível enviar seu pedido para a cozinha. Verifique sua conexão e tente novamente.');
+                    alert('Não foi possível enviar seu pedido. Verifique sua conexão com a internet e tente novamente. Se o problema continuar, fale com a pizzaria.');
                     btn.disabled = false;
                     btn.textContent = textoOriginal;
                 }

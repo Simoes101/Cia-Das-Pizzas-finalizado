@@ -6,7 +6,7 @@
     <title>Cozinha - Cia das Pizzas</title>
     <link rel="stylesheet" href="main.css">
     <style>
-        body { background: #0f1416; }
+        body { background: #0f1416; font-family: sans-serif; margin: 0; }
         .cozinha-header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 1rem 1.5rem; border-bottom: 1px solid rgba(196,126,58,0.3);
@@ -14,214 +14,186 @@
         .cozinha-header h1 { margin: 0; font-size: 1.3rem; color: #e0ddd8; }
         .status-conexao { font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 20px; }
         .status-conexao.online { background: rgba(46,125,50,0.2); color: #6fcf73; border: 1px solid #2e7d32; }
-        .status-conexao.offline { background: rgba(198,40,40,0.2); color: #ef5350; border: 1px solid #c62828; }
+        .status-conexao.offline { background: rgba(160,40,40,0.2); color: #ff8a80; border: 1px solid #a02828; }
         .cozinha-toolbar { display:flex; gap:0.75rem; padding: 0.75rem 1.5rem; }
-        .cozinha-toolbar button { cursor:pointer; }
+        .cozinha-toolbar button, .pedido-card button {
+            cursor:pointer; padding: 0.55rem 1rem; border-radius: 4px;
+            border: 1px solid #c47e3a; background: #c47e3a; color: #fff;
+        }
         #lista-pedidos {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1rem; padding: 1.5rem;
         }
         .pedido-card {
             background: rgba(15,20,22,0.7); border: 1px solid rgba(196,126,58,0.4);
-            border-radius: 12px; padding: 1rem; color: #e0ddd8;
+            border-radius: 12px; padding: 1rem; color: #e0ddd8; position: relative;
         }
         .pedido-card.novo { border-color: #c47e3a; box-shadow: 0 0 0 2px rgba(196,126,58,0.4); }
-        .pedido-card h3 { margin: 0 0 0.5rem 0; color: #c47e3a; }
+        .pedido-card h2 { margin: 0 0 0.5rem; color: #c47e3a; font-size: 1.15rem; }
         .pedido-card .hora { font-size: 0.75rem; color: #999; float: right; }
-        .pedido-card .itens { margin: 0.5rem 0; padding-left: 1rem; }
-        .pedido-card .total { font-weight: 600; margin-top: 0.5rem; }
-        .pedido-card .acoes { margin-top: 0.75rem; display: flex; gap: 0.5rem; }
-        .pedido-card .acoes button { flex: 1; padding: 0.4rem; font-size: 0.85rem; cursor: pointer; }
-        .vazio { padding: 3rem; text-align: center; color: #888; }
-
-        /* Área usada apenas para impressão da comanda (fica invisível na tela) */
+        .pedido-card .itens { margin: 0.5rem 0; padding-left: 1.2rem; }
+        .pedido-card .total { font-weight: 600; margin-top: 0.5rem; color: #c47e3a; }
+        .vazio { padding: 3rem; text-align: center; color: #888; width: 100%; grid-column: 1 / -1; }
         #area-impressao { display: none; }
-
         @media print {
             body * { visibility: hidden; }
             #area-impressao, #area-impressao * { visibility: visible; }
             #area-impressao {
-                display: block;
-                position: absolute; top: 0; left: 0;
-                width: 72mm;
-                font-family: 'Courier New', monospace;
-                font-size: 12px;
-                color: #000;
+                display: block; position: absolute; top: 0; left: 0;
+                width: 72mm; padding: 2mm; color: #000; background: #fff;
+                font: 12px 'Courier New', monospace;
             }
             @page { size: 80mm auto; margin: 2mm; }
         }
     </style>
 </head>
 <body>
-    <div class="cozinha-header">
-        <h1>🍕 Painel da Cozinha</h1>
-        <span id="status-conexao" class="status-conexao offline">Conectando...</span>
-    </div>
+    <header class="cozinha-header">
+        <h1>Cia das Pizzas — Cozinha</h1>
+        <span id="status-conexao" class="status-conexao offline" role="status">Conectando...</span>
+    </header>
 
     <div class="cozinha-toolbar">
-        <button type="button" class="button button-secondary" id="btn-testar">Testar impressão</button>
-        <button type="button" class="button button-secondary" id="btn-som">🔊 Som: Ligado</button>
+        <button type="button" id="btn-testar">Testar impressão</button>
     </div>
 
-    <div id="lista-pedidos">
-        <p class="vazio">Aguardando pedidos...</p>
-    </div>
+    <main id="lista-pedidos" aria-live="polite">
+        <p class="vazio">Carregando pedidos...</p>
+    </main>
+    <div id="area-impressao" aria-hidden="true"></div>
 
-    <div id="area-impressao"></div>
-
-    <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
-        const statusEl = document.getElementById('status-conexao');
         const listaEl = document.getElementById('lista-pedidos');
         const areaImpressao = document.getElementById('area-impressao');
-        const btnSom = document.getElementById('btn-som');
+        const statusEl = document.getElementById('status-conexao');
+        const pedidosConhecidos = new Set();
+        let primeiraConsulta = true;
 
-        let somLigado = true;
-        let pedidosRenderizados = new Map();
-        let filaImpressao = [];
-        let imprimindo = false;
-
-        socket.on('connect', () => {
-            statusEl.textContent = 'Online';
-            statusEl.className = 'status-conexao online';
-        });
-        socket.on('disconnect', () => {
-            statusEl.textContent = 'Offline - verifique a internet';
-            statusEl.className = 'status-conexao offline';
-        });
-
-        socket.on('historico_pedidos', (pedidos) => {
-            pedidos.forEach(p => renderizarPedido(p, false));
-        });
-
-        socket.on('novo_pedido', (pedido) => {
-            renderizarPedido(pedido, true);
-            tocarBeep();
-            enfileirarImpressao(pedido);
-        });
-
-        function formatPrice(v) {
-            return 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
+        function escapeHtml(value) {
+            return String(value || '').replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        function renderizarPedido(pedido, destacarComoNovo) {
-            if (pedidosRenderizados.has(pedido.id)) return;
-            pedidosRenderizados.set(pedido.id, pedido);
+        function formatPrice(value) {
+            return 'R$ ' + Number(value || 0).toFixed(2).replace('.', ',');
+        }
 
-            if (listaEl.querySelector('.vazio')) listaEl.innerHTML = '';
+        function setConnectionState(connected) {
+            statusEl.textContent = connected ? 'Conectado' : 'Sem conexão';
+            statusEl.classList.toggle('online', connected);
+            statusEl.classList.toggle('offline', !connected);
+        }
+
+        function renderOrder(order, isNew) {
+            if (!order || pedidosConhecidos.has(String(order.id))) return;
+            pedidosConhecidos.add(String(order.id));
+
+            const emptyMessage = listaEl.querySelector('.vazio');
+            if (emptyMessage) emptyMessage.remove();
 
             const card = document.createElement('article');
-            card.className = 'pedido-card' + (destacarComoNovo ? ' novo' : '');
-            card.id = 'pedido-' + pedido.id;
-
-            const hora = new Date(pedido.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            const itensHtml = pedido.itens.map(it =>
-                `<li>${it.qty}x ${escapeHtml(it.nome)} — ${formatPrice(it.price * it.qty)}</li>`
-            ).join('');
+            card.className = `pedido-card${isNew ? ' novo' : ''}`;
+            const time = order.criadoEm
+                ? new Date(order.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                : '';
+            const customer = order.cliente || {};
+            const items = Array.isArray(order.itens) ? order.itens : [];
+            const itemsHtml = items.map((item) => {
+                const name = item.name || item.nome || 'Item';
+                const qty = Number(item.qty || item.qtd || 1);
+                return `<li>${qty}x ${escapeHtml(name)} — ${formatPrice(Number(item.price || 0) * qty)}</li>`;
+            }).join('');
 
             card.innerHTML = `
-                <span class="hora">${hora}</span>
-                <h3>Pedido #${pedido.id}</h3>
-                <p><strong>${escapeHtml(pedido.cliente.nome)}</strong> · ${escapeHtml(pedido.cliente.telefone)}</p>
-                <p>${escapeHtml(pedido.cliente.endereco)}, ${escapeHtml(pedido.cliente.bairro)}</p>
-                ${pedido.cliente.referencia ? `<p>Ref: ${escapeHtml(pedido.cliente.referencia)}</p>` : ''}
-                <ul class="itens">${itensHtml}</ul>
-                <p class="total">Total: ${formatPrice(pedido.total)} · Pagamento: ${escapeHtml(pedido.pagamento)}</p>
-                <div class="acoes">
-                    <button type="button" class="button button-secondary btn-reimprimir">Reimprimir</button>
-                </div>
-            `;
+                <span class="hora">${escapeHtml(time)}</span>
+                <h2>Pedido #${escapeHtml(order.id)}</h2>
+                <p><strong>${escapeHtml(customer.nome)}</strong> · ${escapeHtml(customer.telefone)}</p>
+                <p>${escapeHtml(customer.rua || customer.endereco)}, ${escapeHtml(customer.numero)} — ${escapeHtml(customer.bairro)}</p>
+                ${customer.obs ? `<p>Referência: ${escapeHtml(customer.obs)}</p>` : ''}
+                <ul class="itens">${itemsHtml}</ul>
+                ${order.obsGeral ? `<p>Observações: ${escapeHtml(order.obsGeral)}</p>` : ''}
+                <p class="total">Total: ${formatPrice(order.total)} · Pagamento: ${escapeHtml(order.pagamento)}</p>
+                <button type="button" class="btn-imprimir">Imprimir comanda</button>`;
 
-            card.querySelector('.btn-reimprimir').addEventListener('click', () => enfileirarImpressao(pedido));
-
+            card.querySelector('.btn-imprimir').addEventListener('click', () => printOrder(order));
             listaEl.prepend(card);
-
-            setTimeout(() => card.classList.remove('novo'), 8000);
         }
 
-        function escapeHtml(str) {
-            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        function buildReceipt(order) {
+            const customer = order.cliente || {};
+            const itemsHtml = (order.itens || []).map((item) => {
+                const qty = Number(item.qty || item.qtd || 1);
+                const name = item.name || item.nome || 'Item';
+                return `<div>${qty}x ${escapeHtml(name)}</div>
+                    <div>${formatPrice(Number(item.price || 0) * qty)}</div>`;
+            }).join('');
+            const address = [customer.rua || customer.endereco, customer.numero].filter(Boolean).join(', ');
+            const createdAt = order.criadoEm ? new Date(order.criadoEm).toLocaleString('pt-BR') : '';
+
+            return `<div style="text-align:center;font-weight:bold;font-size:14px">CIA DAS PIZZAS</div>
+                <div style="text-align:center">Pedido #${escapeHtml(order.id)}</div>
+                <div style="text-align:center">${escapeHtml(createdAt)}</div>
+                <hr>
+                <div><strong>Cliente:</strong> ${escapeHtml(customer.nome)}</div>
+                <div><strong>Telefone:</strong> ${escapeHtml(customer.telefone)}</div>
+                <div><strong>Endereço:</strong> ${escapeHtml(address)}</div>
+                <div><strong>Bairro:</strong> ${escapeHtml(customer.bairro)}</div>
+                ${customer.obs ? `<div><strong>Referência:</strong> ${escapeHtml(customer.obs)}</div>` : ''}
+                <hr>${itemsHtml}<hr>
+                ${order.obsGeral ? `<div><strong>Observações:</strong> ${escapeHtml(order.obsGeral)}</div>` : ''}
+                <div><strong>Total: ${formatPrice(order.total)}</strong></div>
+                <div><strong>Pagamento:</strong> ${escapeHtml(order.pagamento)}</div>`;
         }
 
-        function montarComanda(pedido) {
-            const hora = new Date(pedido.criadoEm).toLocaleString('pt-BR');
-            const itensTexto = pedido.itens.map(it =>
-                `${it.qty}x ${escapeHtml(it.nome)}\n    ${formatPrice(it.price * it.qty)}`
-            ).join('\n');
-
-            return `
-                <div style="text-align:center; font-weight:bold; font-size:14px;">CIA DAS PIZZAS</div>
-                <div style="text-align:center;">Pedido #${pedido.id}</div>
-                <div style="text-align:center;">${hora}</div>
-                <div>--------------------------------</div>
-                <div><strong>Cliente:</strong> ${escapeHtml(pedido.cliente.nome)}</div>
-                <div><strong>Fone:</strong> ${escapeHtml(pedido.cliente.telefone)}</div>
-                <div><strong>Endereço:</strong> ${escapeHtml(pedido.cliente.endereco)}, ${escapeHtml(pedido.cliente.bairro)}</div>
-                ${pedido.cliente.referencia ? `<div><strong>Ref:</strong> ${escapeHtml(pedido.cliente.referencia)}</div>` : ''}
-                <div>--------------------------------</div>
-                <pre style="white-space:pre-wrap; font-family:inherit; margin:0;">${itensTexto}</pre>
-                <div>--------------------------------</div>
-                <div><strong>Total: ${formatPrice(pedido.total)}</strong></div>
-                <div><strong>Pagamento:</strong> ${escapeHtml(pedido.pagamento)}</div>
-                ${pedido.obsGeral ? `<div>--------------------------------</div><div>Obs: ${escapeHtml(pedido.obsGeral)}</div>` : ''}
-                <div>--------------------------------</div>
-                <div style="text-align:center;">Obrigado pela preferência!</div>
-            `;
+        function printOrder(order) {
+            areaImpressao.innerHTML = buildReceipt(order);
+            window.print();
         }
 
-        function enfileirarImpressao(pedido) {
-            filaImpressao.push(pedido);
-            processarFila();
-        }
+        async function loadOrders() {
+            try {
+                const response = await fetch('/api/pedidos', { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Falha ao consultar pedidos (${response.status}).`);
 
-        function processarFila() {
-            if (imprimindo || filaImpressao.length === 0) return;
-            imprimindo = true;
+                const orders = await response.json();
+                if (!Array.isArray(orders)) throw new Error('Resposta inválida ao consultar pedidos.');
+                setConnectionState(true);
 
-            const pedido = filaImpressao.shift();
-            areaImpressao.innerHTML = montarComanda(pedido);
-
-            // Pequeno atraso pra garantir que o HTML da comanda renderizou
-            // antes de chamar a impressão.
-            setTimeout(() => {
-                window.print();
-                socket.emit('pedido_impresso', pedido.id);
-                imprimindo = false;
-                setTimeout(processarFila, 400);
-            }, 150);
+                orders.forEach((order) => {
+                    renderOrder(order, !primeiraConsulta);
+                });
+                if (primeiraConsulta && orders.length === 0) {
+                    listaEl.innerHTML = '<p class="vazio">Nenhum pedido recebido ainda.</p>';
+                }
+                primeiraConsulta = false;
+            } catch (error) {
+                setConnectionState(false);
+                console.error('Não foi possível atualizar os pedidos:', error);
+            }
         }
 
         document.getElementById('btn-testar').addEventListener('click', () => {
-            enfileirarImpressao({
+            printOrder({
                 id: 'TESTE',
                 criadoEm: new Date().toISOString(),
-                cliente: { nome: 'Cliente Teste', telefone: '(47) 90000-0000', endereco: 'Rua Exemplo, 123', bairro: 'Centro', referencia: '' },
-                itens: [{ nome: 'Pizza 1/2 Metro (Calabresa / Mussarela)', qty: 1, price: 110.9 }],
-                total: 110.9,
-                pagamento: 'pix'
+                cliente: {
+                    nome: 'Impressora de Teste',
+                    telefone: '(47) 99999-9999',
+                    rua: 'Rua Principal',
+                    numero: '123',
+                    bairro: 'Centro',
+                    obs: 'Perto da praça'
+                },
+                itens: [{ qty: 1, name: 'Pizza de Teste Grande', price: 49.9 }],
+                total: 49.9,
+                pagamento: 'pix',
+                obsGeral: 'Teste do sistema'
             });
         });
 
-        btnSom.addEventListener('click', () => {
-            somLigado = !somLigado;
-            btnSom.textContent = somLigado ? '🔊 Som: Ligado' : '🔇 Som: Desligado';
-        });
-
-        function tocarBeep() {
-            if (!somLigado) return;
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.frequency.value = 880;
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.35);
-            } catch (e) { /* ignora se o navegador bloquear áudio */ }
-        }
+        loadOrders();
+        window.setInterval(loadOrders, 3000);
     </script>
 </body>
 </html>
