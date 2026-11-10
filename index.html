@@ -37,53 +37,74 @@
             </div>
         </section>
 
-        <section id="cardapio" class="section">
+        <section id="cardapio" class="section" aria-labelledby="menu-title">
             <div class="section-header">
                 <p class="eyebrow">Nosso Cardápio</p>
-                <h2>Conheça as nossas principais opções</h2>
-                <p>Cardápio completo com pizzas em metro, xis gaúcho, porções, pastéis e bebidas geladas.</p>
+                <h2 id="menu-title">Escolha o que combina com você</h2>
+                <p>Ingredientes caprichados, porções para compartilhar e sabores para todos os gostos.</p>
             </div>
 
-            <div class="cardapio">
-                <article class="card">
-                    <span class="card-tag">Mais pedida</span>
-                    <h3>Pizzas em metro</h3>
-                    <p>Entrega rápida e sabores campeões, ideal para reuniões, festas e famílias que apreciam qualidade.</p>
-                    <p class="price">A partir de R$ 48,90</p>
-                    <a href="pizza.html" class="button button-primary">Ver tamanhos e sabores</a>
-                </article>
+            <div class="cardapio category-card-grid">
+                <a class="category-card category-card-pizza" href="pizza.html">
+                    <span class="category-card-image">
+                        <img src="assets/pizza-em-metro.png" alt="Pizza em metro com cobertura de morangos" loading="lazy">
+                        <img class="category-card-detail" src="assets/sabores-e-tamanhos.png" alt="Opções de tamanhos e sabores de pizza em metro" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Pizza em metro</strong><small>Escolha o tamanho e os sabores</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
 
-                <article class="card">
-                    <span class="card-tag">Clássico</span>
-                    <h3>Xis Gaúcho</h3>
-                    <p>Prensado com recheio generoso, pão crocante e ingredientes selecionados para um xis premium.</p>
-                    <p class="price">A partir de R$ 48,90</p>
-                    <a href="xis.html" class="button button-primary">Montar meu xis</a>
-                </article>
+                <a class="category-card" href="xis.html">
+                    <span class="category-card-image">
+                        <img src="assets/xis-gaucho.png" alt="Xis gaúcho com recheio generoso" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Xis gaúcho</strong><small>Conheça os sabores do nosso cardápio</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
 
-                <article class="card">
-                    <span class="card-tag">Crocante</span>
-                    <h3>Porções</h3>
-                    <p>Porções quentinhas, acompanhadas de molhos especiais. Perfeitas para entrada ou para compartilhar.</p>
-                    <p class="price">A partir de R$ 19,90</p>
-                    <a href="porcoes.html" class="button button-primary">Ver porções</a>
-                </article>
+                <a class="category-card" href="bebidas.html">
+                    <span class="category-card-image">
+                        <img src="assets/bebidas-foto.png" alt="Refrigerantes variados servidos gelados com gelo" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Bebidas</strong><small>Refresque seu pedido</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
 
-                <article class="card">
-                    <span class="card-tag">Sabor caseiro</span>
-                    <h3>Pastéis</h3>
-                    <p>Pastéis fritos na hora, com massa leve e recheios caprichados. Crocância garantida a cada mordida.</p>
-                    <p class="price">A partir de R$ 21,90</p>
-                    <a href="pasteis.html" class="button button-primary">Ver pastéis</a>
-                </article>
+                <a class="category-card" href="pasteis.html">
+                    <span class="category-card-image">
+                        <img src="assets/pasteis-foto.png" alt="Pastéis dourados servidos com molhos e acompanhamentos" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Pastéis</strong><small>Crocantes e feitos na hora</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
 
-                <article class="card">
-                    <span class="card-tag">Fresco</span>
-                    <h3>Bebidas</h3>
-                    <p>Bebidas geladas e refrescantes para acompanhar seu pedido do início ao fim.</p>
-                    <p class="price">A partir de R$ 9,00</p>
-                    <a href="bebidas.html" class="button button-primary">Ver bebidas</a>
-                </article>
+                <a class="category-card" href="porcoes.html">
+                    <span class="category-card-image">
+                        <img src="assets/porcoes-foto.png" alt="Porção de batatas fritas com queijo e bacon" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Porções</strong><small>Perfeitas para compartilhar</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
+
+                <a class="category-card" href="porcoes.html#hot-dogs">
+                    <span class="category-card-image">
+                        <img src="assets/hot-dogs-foto.png" alt="Hot dog prensado com queijo, batata palha e acompanhamentos" loading="lazy">
+                    </span>
+                    <span class="category-card-caption">
+                        <span><strong>Hot Dogs</strong><small>Opções salgadas e doces</small></span>
+                        <span class="category-card-arrow" aria-hidden="true">→</span>
+                    </span>
+                </a>
             </div>
         </section>
 
