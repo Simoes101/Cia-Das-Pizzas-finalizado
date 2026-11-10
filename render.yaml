@@ -5,6 +5,7 @@ services:
     plan: starter
     buildCommand: npm ci
     startCommand: npm start
+    autoDeployTrigger: off
     disk:
       name: pedidos
       mountPath: /var/data

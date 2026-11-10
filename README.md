@@ -2,6 +2,20 @@
 
 Site de pedidos com servidor Node.js, armazenamento persistente dos pedidos e painel protegido para a cozinha.
 
+## Publicar no Render sem domínio próprio
+
+O Render fornece um endereço HTTPS temporário (`onrender.com`), sem precisar registrar domínio. O projeto está preparado para criar o servidor Node.js e um disco persistente para os pedidos.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Simoes101/Cia-Das-Pizzas-finalizado)
+
+1. Clique em **Deploy to Render** e crie uma conta ou entre na sua conta Render. Autorize o acesso ao repositório público `Simoes101/Cia-Das-Pizzas-finalizado` se solicitado.
+2. O Render lerá o Blueprint `render.yaml`. Antes de confirmar, confira o preço do serviço **Starter**, do disco de 1 GB, a moeda, os impostos e o total apresentado. O plano gratuito não mantém o disco persistente necessário para guardar os pedidos. Se o custo convertido ultrapassar seu limite de R$ 60 por mês ou houver cobrança antecipada que você não aceite, pare nesta tela; não confirme.
+3. Na configuração do Blueprint, crie uma senha forte e exclusiva para `KITCHEN_PASSWORD`. Guarde-a em local privado; ela protege o painel da cozinha. Não a envie por chat nem a coloque no GitHub.
+4. Só depois de conferir o custo e decidir prosseguir, confirme a criação e aguarde o deploy terminar. O Render fornecerá um endereço como `https://cia-das-pizzas.onrender.com`.
+5. Teste o endereço: a página inicial deve abrir e `https://SEU-ENDERECO/api/health` deve responder `{"status":"ok"}`. Abra `https://SEU-ENDERECO/cozinha.html` e entre com o usuário `cozinha` e a senha criada no passo 3. Faça um pedido de teste e confirme que ele aparece no painel.
+
+O projeto está configurado para não fazer deploy automático a cada alteração do GitHub. Para publicar uma atualização no futuro, use **Manual Deploy** no serviço do Render. Os pedidos ficam no disco persistente; não remova o disco, pois isso apaga o histórico armazenado nele. Confira também os preços e regras atuais na [página oficial de preços do Render](https://render.com/pricing) antes de autorizar qualquer cobrança.
+
 ## Hospedar em uma VPS HostGator
 
 Esta opção usa Docker e mantém os pedidos em um volume persistente do servidor. A compra da VPS, do domínio e qualquer pagamento ficam por conta do proprietário. **Não receba pedidos reais por HTTP sem HTTPS.**
@@ -118,19 +132,6 @@ docker compose exec -T app sh -c 'cat "$DATA_DIR/pedidos.json"' > "backups/pedid
 ```
 
 Copie os arquivos da pasta `backups` para um computador seguro. Não execute `docker compose down -v`: a opção `-v` remove o volume que contém os pedidos.
-
-## Publicar no Render
-
-1. Envie este projeto para um repositório GitHub e, no Render, crie um serviço usando o Blueprint do repositório (`render.yaml`).
-2. No Render, defina `KITCHEN_PASSWORD` com uma senha forte e exclusiva para a equipe. Não coloque essa senha no código nem no Git.
-3. Faça o deploy e aguarde o serviço ficar disponível. O Render fornecerá um endereço HTTPS público para o cardápio.
-4. Abra `https://SEU-ENDERECO/cozinha.html` no computador da pizzaria. O navegador pedirá o usuário `cozinha` e a senha configurada em `KITCHEN_PASSWORD`.
-5. Faça um pedido de teste pelo site. O pedido deve aparecer no painel. Clique em **Imprimir comanda** e escolha a impressora de rede da cozinha na janela de impressão.
-6. Use **Testar impressão** para conferir o tamanho do papel e as margens antes de começar a receber pedidos.
-
-O Blueprint configura um disco persistente para que os pedidos não desapareçam quando o serviço reiniciar. O plano configurado no Render e o disco podem ter custo; confira os valores exibidos pelo Render antes de confirmar a criação do serviço. Não remova nem recrie o disco sem fazer backup, pois o histórico de pedidos está nele.
-
-O computador da cozinha precisa permanecer ligado e conectado à internet. A impressão é confirmada por um funcionário no navegador; a impressora deve estar instalada e acessível nesse computador. O site não imprime automaticamente enquanto o painel estiver fechado.
 
 ## Executar localmente
 
