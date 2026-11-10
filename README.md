@@ -18,101 +18,65 @@ O projeto está configurado para não fazer deploy automático a cada alteraçã
 
 ## Hospedar em uma VPS HostGator
 
-Esta opção usa Docker e mantém os pedidos em um volume persistente do servidor. A compra da VPS, do domínio e qualquer pagamento ficam por conta do proprietário. **Não receba pedidos reais por HTTP sem HTTPS.**
+Esta opção usa Docker, mantém os pedidos em um volume persistente e configura HTTPS automaticamente com Caddy. Para começar sem comprar domínio, use um endereço temporário gratuito do [sslip.io](https://sslip.io/), que aponta para o IP da VPS. Para montar esse endereço, troque os pontos do IPv4 do servidor por hífens e acrescente `.sslip.io` (por exemplo, `203-0-113-10.sslip.io`); um domínio próprio pode ser conectado depois.
 
-### Antes de contratar
+### Publicar no AlmaLinux 9
 
-1. Na [página de VPS da HostGator](https://www.hostgator.com.br/servidor-vps), confira o preço do ciclo **Mensal** antes de pagar. O [guia oficial de contratação](https://suporte.hostgator.com.br/hc/pt-br/articles/45892434068243-Como-contratar-uma-VPS-na-HostGator) informa as opções mensal, anual, bienal e trienal. O valor promocional destacado pode exigir pagamento antecipado de vários anos; não prossiga se o total ou o período não forem os que você quer.
-2. Para um site pequeno, o plano inicial (NVMe 2, atualmente informado com 1 vCPU, 2 GB de RAM e 50 GB) deve ser suficiente. Selecione a aplicação **Docker** e não adicione uma licença cPanel.
-3. Como você ainda não tem domínio, será preciso registrar um para ter um endereço próprio e ativar HTTPS. O domínio pode ter custo separado e normalmente é renovado anualmente; confira também esse valor antes de pagar.
-4. Escolha Pix se essa forma aparecer no carrinho. O [Pix Automático](https://suporte.hostgator.com.br/hc/pt-br/articles/42481864736787-Como-ativar-e-cancelar-o-Pix-Recorrente) é autorizado no aplicativo do banco; confira o valor máximo e a recorrência antes de autorizar.
+1. Conecte à VPS pelo PowerShell do Windows:
 
-### Preparar o DNS
-
-Depois de contratar e receber o endereço IP da VPS:
-
-1. Registre um domínio e abra o gerenciamento de DNS do domínio.
-2. Crie um registro **A** para o domínio raiz (`@`) apontando para o IP da VPS.
-3. Crie outro registro **A** para `www` apontando para o mesmo IP. Aguarde a propagação antes de configurar o certificado.
-
-### Publicar o site
-
-Os comandos abaixo são executados no terminal da VPS, depois de conectar por SSH. No Windows, abra o PowerShell e use `ssh root@IP_DA_VPS`, trocando pelo IP recebido. Nunca compartilhe a senha de root ou a senha da cozinha no GitHub ou no chat.
-
-1. Instale as ferramentas necessárias e prepare o proxy no AlmaLinux:
-
-   ```bash
-   dnf install -y git nginx nano policycoreutils-python-utils
-   setsebool -P httpd_can_network_connect 1
-   systemctl enable --now nginx
+   ```powershell
+   ssh -p 22022 root@IP_DA_VPS
    ```
 
-   Confira se o Docker e o Compose estão disponíveis:
+   Nunca compartilhe a senha root. A HostGator também permite abrir um console no Portal do Cliente.
+
+2. Se o firewalld já estiver ativo, libere SSH, HTTP e HTTPS antes de publicar:
 
    ```bash
-   docker --version
+   if systemctl is-active --quiet firewalld; then
+     firewall-cmd --permanent --add-port=22022/tcp
+     firewall-cmd --permanent --add-service=http
+     firewall-cmd --permanent --add-service=https
+     firewall-cmd --reload
+   fi
+   ```
+
+   Não ative o firewalld sem primeiro configurar a porta SSH da VPS; bloqueá-la pode interromper seu acesso. Se o painel HostGator tiver regras de rede para a VPS, libere as portas **22022, 80 e 443** nele.
+
+3. Inicie o Docker e baixe o projeto:
+
+   ```bash
+   systemctl enable --now docker
    docker compose version
-   ```
-
-   Se algum comando não existir, instale o Docker seguindo o [guia oficial da HostGator para VPS AlmaLinux](https://suporte.hostgator.com.br/hc/pt-br/articles/45902431236243-Como-instalar-o-n8n-via-Docker-Docker-Compose-no-VPS-AlmaLinux-9), nas etapas de instalação do Docker e do Docker Compose.
-
-2. Baixe o projeto e crie uma senha forte para o painel da cozinha:
-
-   ```bash
    git clone https://github.com/Simoes101/Cia-Das-Pizzas-finalizado.git /opt/cia-das-pizzas
    cd /opt/cia-das-pizzas
-   cp .env.example .env
-   openssl rand -hex 24
-   nano .env
    ```
 
-   Copie o valor gerado pelo `openssl` para `KITCHEN_PASSWORD=` no arquivo `.env`, salve com `Ctrl+O`, `Enter` e saia com `Ctrl+X`. Proteja o arquivo:
+4. Configure uma senha forte e exclusiva para o painel da cozinha e o endereço temporário:
 
    ```bash
+   password=$(openssl rand -hex 24)
+   printf 'KITCHEN_PASSWORD=%s\nSITE_DOMAIN=IP-COM-HIFENS.sslip.io\n' "$password" > .env
    chmod 600 .env
+   printf 'Senha do painel da cozinha: %s\n' "$password"
+   unset password
    ```
 
-3. Inicie o site:
+   Guarde a senha exibida em local seguro; ela será usada com o usuário `cozinha`. Não publique o arquivo `.env`.
+
+5. Inicie o site e confirme que os serviços estão ativos:
 
    ```bash
    docker compose up -d --build
    docker compose ps
-   curl http://127.0.0.1:3000/api/health
+   curl https://IP-COM-HIFENS.sslip.io/api/health
    ```
 
-   A resposta esperada do último comando contém `"status":"ok"`. O Docker Compose publica a aplicação somente em `127.0.0.1`, para que visitantes não acessem o servidor sem passar pelo Nginx.
+   A resposta esperada do último comando contém `"status":"ok"`. Caddy solicita e renova automaticamente o certificado HTTPS. A primeira emissão pode levar alguns minutos.
 
-4. Configure o Nginx. Copie o exemplo, substitua `exemplo.com.br` e `www.exemplo.com.br` pelo seu domínio e teste a configuração:
+6. Abra `https://IP-COM-HIFENS.sslip.io` para o cardápio e `https://IP-COM-HIFENS.sslip.io/cozinha.html` para o painel, substituindo `IP-COM-HIFENS` pelo IPv4 da VPS com pontos trocados por hífens. Entre com o usuário `cozinha` e a senha do passo 4. Faça um pedido de teste e confirme que ele aparece na cozinha.
 
-   ```bash
-   cp /opt/cia-das-pizzas/deploy/nginx.conf.example /etc/nginx/conf.d/cia-das-pizzas.conf
-   nano /etc/nginx/conf.d/cia-das-pizzas.conf
-   nginx -t
-   systemctl reload nginx
-   ```
-
-5. Libere as portas **80 (HTTP)** e **443 (HTTPS)** no firewall do AlmaLinux e, se o painel do provedor tiver regras de rede, também nele:
-
-   ```bash
-   systemctl enable --now firewalld
-   firewall-cmd --permanent --add-service=http --add-service=https
-   firewall-cmd --reload
-   ```
-
-   Instale o Certbot e emita o certificado para os nomes que realmente apontam para a VPS:
-
-   ```bash
-   dnf install -y epel-release
-   dnf install -y certbot python3-certbot-nginx
-   certbot --nginx -d SEU-DOMINIO -d www.SEU-DOMINIO
-   certbot renew --dry-run
-   ```
-
-   Substitua `SEU-DOMINIO` pelo domínio registrado. O Certbot solicitará um e-mail e configurará HTTPS no Nginx. Se você não criou o registro `www`, remova `-d www.SEU-DOMINIO`.
-
-6. Abra `https://SEU-DOMINIO` para o cardápio e `https://SEU-DOMINIO/cozinha.html` no computador da pizzaria. O painel pede o usuário `cozinha` e a senha anotada no passo 2.
-
-7. Faça um pedido de teste. Na cozinha, confira os dados e clique em **Imprimir comanda**; escolha a impressora da rede e use **Testar impressão** para ajustar papel e margens.
+Para usar um domínio próprio depois, configure os registros DNS para apontarem à VPS, altere `SITE_DOMAIN` no `.env` e reinicie os serviços com `docker compose up -d`.
 
 ### Atualizações e cópias de segurança
 
