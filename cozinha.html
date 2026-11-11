@@ -40,9 +40,34 @@
             #area-impressao, #area-impressao * { visibility: visible; }
             #area-impressao {
                 display: block; position: absolute; top: 0; left: 0;
-                width: 72mm; padding: 2mm; color: #000; background: #fff;
-                font: 12px 'Courier New', monospace;
+                width: 76mm; box-sizing: border-box; padding: 3mm;
+                min-height: 140mm;
+                color: #000 !important; background: #fff !important;
+                font: 700 16px/1.55 Arial, Helvetica, sans-serif !important;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
             }
+            #area-impressao .receipt-header { text-align: center; margin-bottom: 5mm; }
+            #area-impressao .receipt-brand { font-size: 20px; font-weight: 900; }
+            #area-impressao .receipt-order { margin-top: 2mm; font-size: 27px; font-weight: 900; line-height: 1.2; }
+            #area-impressao .receipt-date { margin-top: 1mm; font-size: 14px; }
+            #area-impressao .receipt-section { margin: 5mm 0; }
+            #area-impressao .receipt-section > div { margin: 1.5mm 0; }
+            #area-impressao .receipt-label { font-weight: 900; }
+            #area-impressao .receipt-item {
+                display: flex; justify-content: space-between; gap: 2mm; margin: 3mm 0;
+                font-size: 17px; font-weight: 800;
+            }
+            #area-impressao .receipt-item-name { flex: 1; }
+            #area-impressao .receipt-item-price { white-space: nowrap; font-weight: 900; }
+            #area-impressao .receipt-note {
+                margin: 4mm 0; padding: 3mm; border: 2px solid #000;
+                font-size: 17px; font-weight: 900; overflow-wrap: anywhere;
+            }
+            #area-impressao .receipt-total {
+                margin-top: 4mm !important; padding-top: 3mm; border-top: 2px dashed #000;
+                font-size: 22px; font-weight: 900;
+            }
+            #area-impressao hr { margin: 4mm 0; border: 0; border-top: 2px dashed #000; }
             @page { size: 80mm auto; margin: 2mm; }
         }
     </style>
@@ -125,25 +150,34 @@
             const itemsHtml = (order.itens || []).map((item) => {
                 const qty = Number(item.qty || item.qtd || 1);
                 const name = item.name || item.nome || 'Item';
-                return `<div>${qty}x ${escapeHtml(name)}</div>
-                    <div>${formatPrice(Number(item.price || 0) * qty)}</div>`;
+                return `<div class="receipt-item">
+                    <span class="receipt-item-name">${qty}x ${escapeHtml(name)}</span>
+                    <span class="receipt-item-price">${formatPrice(Number(item.price || 0) * qty)}</span>
+                </div>`;
             }).join('');
             const address = [customer.rua || customer.endereco, customer.numero].filter(Boolean).join(', ');
             const createdAt = order.criadoEm ? new Date(order.criadoEm).toLocaleString('pt-BR') : '';
 
-            return `<div style="text-align:center;font-weight:bold;font-size:14px">CIA DAS PIZZAS</div>
-                <div style="text-align:center">Pedido #${escapeHtml(order.id)}</div>
-                <div style="text-align:center">${escapeHtml(createdAt)}</div>
+            return `<header class="receipt-header">
+                    <div class="receipt-brand">CIA DAS PIZZAS</div>
+                    <div class="receipt-order">PEDIDO #${escapeHtml(order.id)}</div>
+                    <div class="receipt-date">${escapeHtml(createdAt)}</div>
+                </header>
                 <hr>
-                <div><strong>Cliente:</strong> ${escapeHtml(customer.nome)}</div>
-                <div><strong>Telefone:</strong> ${escapeHtml(customer.telefone)}</div>
-                <div><strong>Endereço:</strong> ${escapeHtml(address)}</div>
-                <div><strong>Bairro:</strong> ${escapeHtml(customer.bairro)}</div>
-                ${customer.obs ? `<div><strong>Referência:</strong> ${escapeHtml(customer.obs)}</div>` : ''}
-                <hr>${itemsHtml}<hr>
-                ${order.obsGeral ? `<div><strong>Observações:</strong> ${escapeHtml(order.obsGeral)}</div>` : ''}
-                <div><strong>Total: ${formatPrice(order.total)}</strong></div>
-                <div><strong>Pagamento:</strong> ${escapeHtml(order.pagamento)}</div>`;
+                <section class="receipt-section">
+                    <div><span class="receipt-label">CLIENTE:</span> ${escapeHtml(customer.nome)}</div>
+                    <div><span class="receipt-label">TELEFONE:</span> ${escapeHtml(customer.telefone)}</div>
+                    <div><span class="receipt-label">ENDEREÇO:</span> ${escapeHtml(address)}</div>
+                    <div><span class="receipt-label">BAIRRO:</span> ${escapeHtml(customer.bairro)}</div>
+                    ${customer.obs ? `<div><span class="receipt-label">REFERÊNCIA:</span> ${escapeHtml(customer.obs)}</div>` : ''}
+                </section>
+                <hr>
+                <section class="receipt-section">${itemsHtml}</section>
+                ${order.obsGeral ? `<div class="receipt-note">OBSERVAÇÕES: ${escapeHtml(order.obsGeral)}</div>` : ''}
+                <section class="receipt-section">
+                    <div class="receipt-total">TOTAL: ${formatPrice(order.total)}</div>
+                    <div><span class="receipt-label">PAGAMENTO:</span> ${escapeHtml(order.pagamento)}</div>
+                </section>`;
         }
 
         function printOrder(order) {
